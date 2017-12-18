@@ -1,31 +1,54 @@
-from flask import render_template,session,redirect,url_for
+from flask import render_template,g,session,redirect,url_for
 from . import main
 from .. import db
 from ..models import Student,Score
 from sqlalchemy import func
+
+@main.before_app_first_request
+def bf_first_request():
+    main.studentNum = db.session.query(func.count(Student.id)).scalar()
+
 @main.route("/welcome")
-def hello():
-    return "hello"
+def index():
+    #g.courseNum=db.session.query(Score.courseName, func.count(Score.courseName)).group_by(Score.courseName).first()[1]
+    g.studentNum=main.studentNum
+    major=db.session.query(Student.majorName,func.count(Student.id).label("majorNum")).group_by(Student.majorName).all()
+    g.majorNum=len(major)
+    g.major=major
+    course=db.session.query(Score.courseName,func.count(Score.id).label("courseNum")).group_by(Score.courseName).all()
+    g.courseNum=len(course)
+    g.course=course
+    return render_template("index.html",studentNum=main.studentNum,g=g)
 
 @main.route("/student",methods=["GET","POST"])
-def studentAnalysis():
+def students():
+    return render_template("students.html",studentNum=main.studentNum)
+
+@main.route("/lesson",methods=["GET","POST"])
+def lessons():
+    return render_template("lessons.html",studentNum=main.studentNum)
+@main.route("/totalRank",methods=["GET","POST"])
+def totalRank():
+    return render_template("totalRank.html",studentNum=main.studentNum)
+@main.route("/specializedRank",methods=["GET","POST"])
+def specializedRank():
+    return render_template("specializedRank.html",studentNum=main.studentNum)
+
+
+
+def queryAvgTwo(key):
     studentid = "17110250102"
-    result=db.session.query(Student.id,Student.gender,Student.departmentName,Student.majorName,Student.className,Student.grade,Student.jidian,Student.average).filter(Student.id==studentid).first()
-    jidianPM=db.session.query(result[0],func.count("*")).filter(Student.jidian>=result[6]).first()
-    averagePM=db.session.query(result[0],func.count("*")).filter(Student.average>=result[7]).first()
-    print(jidianPM,averagePM)
+    result = db.session.query(Student.id, Student.gender, Student.departmentName, Student.majorName, Student.className,
+                              Student.grade, Student.jidian, Student.average).filter(Student.id == studentid).first()
+    jidianPM = db.session.query(result[0], func.count("*")).filter(Student.jidian >= result[6]).first()
+    averagePM = db.session.query(result[0], func.count("*")).filter(Student.average >= result[7]).first()
+    print(jidianPM, averagePM)
     queryAvgTwo("性别")
-
-
-@main.route("/course",methods=["GET","POST"])
-def courseAnalysis():
     result=db.session.query(Score.courseId,Score.courseName,func.avg(Score.mark).label("average")).group_by(Score.courseId).order_by(db.desc("average")).all()
     jidianPM=db.session.query(result[0],func.count("*")).filter(Student.jidian>=result[6]).first()
     averagePM=db.session.query(result[0],func.count("*")).filter(Student.average>=result[7]).first()
     print(jidianPM,averagePM)
     queryAvgTwo("性别")
-
-def queryAvgTwo(key):
     keyDict={
         "性别":Student.gender,
         "学院":Student.departmentName,

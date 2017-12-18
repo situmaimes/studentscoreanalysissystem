@@ -16,6 +16,6 @@ def make_shell_context():
     return dict(app=app, db=db,Student=Student,Score=Score)
 manager.add_command("shell", Shell(make_context=make_shell_context))
 if __name__=="__main__":
-    #app.run("0.0.0.0",port=5000,debug=True)
-    manager.run()
+    app.run("0.0.0.0",port=5000,debug=True)
+    #manager.run()
 

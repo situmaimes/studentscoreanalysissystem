@@ -1,0 +1,152 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Home</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+<!-- Bootstrap Core CSS -->
+<link href="{{ url_for('static', filename = 'css/bootstrap.css') }}" rel='stylesheet' type='text/css' />
+<!-- Custom CSS -->
+<link href="{{ url_for('static', filename = 'css/style.css') }}" rel='stylesheet' type='text/css' />
+<!-- font CSS -->
+<!-- font-awesome icons -->
+<link href="{{ url_for('static', filename = 'css/font-awesome.css') }}" rel="stylesheet">
+<!-- //font-awesome icons -->
+ <!-- js-->
+<script src="{{ url_for('static', filename = 'js/jquery-1.11.1.min.js') }}"></script>
+<script src="{{ url_for('static', filename = 'js/modernizr.custom.js') }}"></script>
+<!--webfonts-->
+<link href='https://fonts.googleapis.com/css?family=Roboto+Condensed:400,300,300italic,400italic,700,700italic' rel='stylesheet' type='text/css'>
+<!--//webfonts-->
+<!-- chart -->
+<script src="{{ url_for('static', filename = 'js/Chart.js') }}"></script>
+<!-- //chart -->
+<!-- Metis Menu -->
+<script src="{{ url_for('static', filename = 'js/metisMenu.min.js') }}"></script>
+<script src="{{ url_for('static', filename = 'js/custom.js') }}"></script>
+<link href="{{ url_for('static', filename = 'css/custom.css') }}" rel="stylesheet">
+<!--//Metis Menu -->
+</head>
+<body class="cbp-spmenu-push">
+	<div class="main-content">
+		<!--left-fixed -navigation-->
+		<div class=" sidebar" role="navigation">
+            <div class="navbar-collapse">
+				<nav class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-left" id="cbp-spmenu-s1">
+					<ul class="nav" id="side-menu">
+						<li>
+							<a href="{{ url_for('.index') }}" class="active"><i class="fa fa-home nav_icon"></i>概览</a>
+						</li>
+						<li>
+							<a href="#">
+								<i class="fa fa-cogs nav_icon"></i>学生
+								<span class="nav-badge">{{ studentNum }}</span>
+								<span class="fa arrow"></span>
+							</a>
+							<ul class="nav nav-second-level collapse">
+								<li>
+									<a href="{{ url_for('.students') }}">基本信息查询</a>
+								</li>
+								<li>
+									<a href="{{ url_for('.totalRank') }}">总排名</a>
+								</li>
+
+								<li>
+									<a href="{{ url_for('.specializedRank') }}">专业排名</a>
+								</li>
+							</ul>
+							<!-- /nav-second-level -->
+						</li>
+						<li>
+							<a href="{{ url_for('.lessons') }}"><i class="fa fa-book nav_icon"></i>课程</a>
+						</li>
+						<li>
+							<a href="#"><i class="fa fa-envelope nav_icon"></i>数据分析<span class="fa arrow"></span></a>
+							<ul class="nav nav-second-level collapse">
+								<li>
+									<a href="analysisStudent.html">学生</a>
+								</li>
+								<li>
+									<a href="analysisLesson.html">课程</a>
+								</li>
+							</ul>
+							<!-- //nav-second-level -->
+						</li>
+						<li>
+							<a href="#"><i class="fa fa-book nav_icon"></i>对比 <span class="fa arrow"></span></a>
+							<ul class="nav nav-second-level collapse">
+								<li>
+									<a href="comparisionStudent.html">学生</a>
+								</li>
+								<li>
+									<a href="comparisionLesson.html">课程</a>
+								</li>
+							</ul>
+							<!-- /nav-second-level -->
+						</li>
+					</ul>
+					<!-- //sidebar-collapse -->
+				</nav>
+			</div>
+		</div>
+		<!--left-fixed -navigation-->
+		<!-- header-starts -->
+		<div class="sticky-header header-section ">
+			<div class="header-left">
+				<!--toggle button start-->
+				<button id="showLeftPush"><i class="fa fa-bars"></i></button>
+				<!--toggle button end-->
+				<!--logo -->
+				<div class="logo">
+					<a href="{{ url_for('.index') }}">
+						<h1>学生信息</h1>
+						<span>AdminPanel</span>
+					</a>
+				</div>
+				<!--//logo-->
+				<div class="clearfix"> </div>
+			</div>
+			{% block search %}
+
+			{% endblock %}
+		</div>
+		<!-- //header-ends -->
+		<!-- main content start-->
+		{% block main %}
+		{% endblock %}
+		<!--footer-->
+		<div class="footer">
+		   <p>Copyright &copy; 2017 Company All rights reserved.</p>
+		</div>
+        <!--//footer-->
+	</div>
+	<!-- Classie-->
+		<script src="{{ url_for('static', filename = 'js/classie.js') }}"></script>
+		<script>
+			var menuLeft = document.getElementById( 'cbp-spmenu-s1' ),
+				showLeftPush = document.getElementById( 'showLeftPush' ),
+				body = document.body;
+
+			showLeftPush.onclick = function() {
+				classie.toggle( this, 'active' );
+				classie.toggle( body, 'cbp-spmenu-push-toright' );
+				classie.toggle( menuLeft, 'cbp-spmenu-open' );
+				disableOther( 'showLeftPush' );
+			};
+
+
+			function disableOther( button ) {
+				if( button !== 'showLeftPush' ) {
+					classie.toggle( showLeftPush, 'disabled' );
+				}
+			}
+		</script>
+	<!--scrolling js-->
+	<script src="{{ url_for('static', filename = 'js/jquery.nicescroll.js')}}"></script>
+	<script src="{{ url_for('static', filename = 'js/scripts.js') }}"></script>
+	<!--//scrolling js-->
+	<!-- Bootstrap Core JavaScript -->
+   <script src="{{ url_for('static', filename = 'js/bootstrap.js') }}"> </script>
+</body>
+</html>
