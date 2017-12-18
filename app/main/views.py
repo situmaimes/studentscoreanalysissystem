@@ -14,7 +14,21 @@ def index():
     g.studentNum=main.studentNum
     major=db.session.query(Student.majorName,func.count(Student.id).label("majorNum")).group_by(Student.majorName).all()
     g.majorNum=len(major)
-    g.major=major
+    totalNum = 0
+    # 计算各专业占百分比
+    majors = []
+    for classes in major:
+        totalNum += classes.majorNum
+        majors.append(list(classes))
+
+    for classes in majors:
+        classes[1] = (int(classes[1] / totalNum * 100))
+
+    top20score = Student.query.order_by(Student.average.desc()).all()[:20]
+
+    g.major = major
+    g.majors=majors
+    g.score = top20score
     course=db.session.query(Score.courseName,func.count(Score.id).label("courseNum")).group_by(Score.courseName).all()
     g.courseNum=len(course)
     g.course=course
@@ -33,7 +47,10 @@ def lessons():
     return render_template("lessons.html",studentNum=main.studentNum)
 @main.route("/totalRank",methods=["GET","POST"])
 def totalRank():
-    return render_template("totalRank.html",studentNum=main.studentNum)
+    top20score = Student.query.order_by(Student.average.desc()).all()[:100]
+
+    g.score = top20score
+    return render_template("totalRank.html",studentNum=main.studentNum, g = g)
 @main.route("/specializedRank",methods=["GET","POST"])
 def specializedRank():
     return render_template("specializedRank.html",studentNum=main.studentNum)

@@ -42,9 +42,21 @@
 						<h4 class="title">性别比例</h4>
 						<canvas id="pie" height="300" width="600"> </canvas>
 					</div>
-					<div class="col-md-6 charts-grids widget states-mdl">
-						<h4 class="title">班级人数</h4>
-						<canvas id="bar" height="300" width="600"> </canvas>
+					<div class="col-md-8 stats-info widget states-mdl">
+						<div class="stats-title">
+							<h4 class="title">专业分布</h4>
+						</div>
+						<div class="stats-body">
+							<ul class="list-unstyled">
+								{% for classes in g.majors %}
+								<li>{{ classes[0] }} <span class="pull-right">{{ classes[1] }}%</span>
+									<div class="progress progress-striped active progress-right">
+										<div class="bar green" style="width:{{ classes[1] }}%;"></div>
+									</div>
+								</li>
+								{% endfor %}
+							</ul>
+						</div>
 					</div>
 
 					<div class="clearfix"> </div>
@@ -81,77 +93,36 @@
 										}
 									];
 
-							new Chart(document.getElementById("bar").getContext("2d")).Bar(barChartData);
+							//new Chart(document.getElementById("bar").getContext("2d")).Bar(barChartData);
 							new Chart(document.getElementById("pie").getContext("2d")).Pie(pieData);
 
 							</script>
 
 				</div>
 				<div class="row">
-					<div class="col-md-4 stats-info widget">
-						<div class="stats-title">
-							<h4 class="title">专业分布</h4>
-						</div>
-						<div class="stats-body">
-							<ul class="list-unstyled">
-								<li>计算机科学与技术 <span class="pull-right">85%</span>
-									<div class="progress progress-striped active progress-right">
-										<div class="bar green" style="width:85%;"></div>
-									</div>
-								</li>
-								<li>土木工程 <span class="pull-right">35%</span>
-									<div class="progress progress-striped active progress-right">
-										<div class="bar yellow" style="width:35%;"></div>
-									</div>
-								</li>
-								<li>网络工程 <span class="pull-right">78%</span>
-									<div class="progress progress-striped active progress-right">
-										<div class="bar red" style="width:78%;"></div>
-									</div>
-								</li>
-								<li>软件工程 <span class="pull-right">50%</span>
-									<div class="progress progress-striped active progress-right">
-										<div class="bar blue" style="width:50%;"></div>
-									</div>
-								</li>
-							</ul>
-						</div>
-					</div>
-					<div class="col-md-8 stats-info stats-last widget-shadow">
+
+					<div class="stats-info widget-shadow">
 						<table class="table stats-table table-hover">
 							<thead>
 								<tr>
 									<th>排名</th>
 									<th>学号</th>
 									<th>性别</th>
-									<th>绩点</th>
+									<th>平均分</th>
 								</tr>
 							</thead>
 							<tbody>
-								<tr onclick="window.open('https://www.baidu.com')">
-									<th scope="row">1</th>
-									<td>17100310622</td>
-									<td><span class="label label-success">男</span></td>
-									<td><h5>95.4 <i class="label"></i></h5></td>
+								{% for student in g.score %}
+								<tr style="cursor: pointer;" onclick="window.open('https://www.baidu.com')">
+									<th scope="row">{{ loop.index }}</th>
+									<td>{{ student.id }}</td>
+									<td><span class="label label-success">{{ student.gender }}</span></td>
+									<td><h5>{{ student.average }} <i class="label"></i></h5></td>
 								</tr>
-								<tr>
-									<th scope="row">2</th>
-									<td>17100310654</td>
-									<td><span class="label label-success">男</span></td>
-									<td><h5>94.3 <i class="label"></i></h5></td>
-								</tr>
-								<tr>
-									<th scope="row">3</th>
-									<td>17100315452</td>
-									<td><span class="label label-danger">女</span></td>
-									<td><h5  class="down">89.5 <i class="label"></i></h5></td>
-								</tr>
-								<tr>
-									<th scope="row">4</th>
-									<td>'1710043222</td>
-									<td><span class="label label-success">男</span></td>
-									<td><h5>87.5 <i class="label"></i></h5></td>
-								</tr>
+								{% endfor %}
+								<script>
+
+								</script>
 							</tbody>
 						</table>
 					</div>
