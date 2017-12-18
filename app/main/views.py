@@ -18,6 +18,10 @@ def index():
     course=db.session.query(Score.courseName,func.count(Score.id).label("courseNum")).group_by(Score.courseName).all()
     g.courseNum=len(course)
     g.course=course
+    male = db.session.query(Student.id).filter_by(gender='男').count()
+    female = db.session.query(Student.id).filter_by(gender='女').count()
+    g.male = male
+    g.female = female
     return render_template("index.html",studentNum=main.studentNum,g=g)
 
 @main.route("/student",methods=["GET","POST"])
@@ -58,5 +62,3 @@ def queryAvgTwo(key):
     }
     result=db.session.query(keyDict[key],func.avg(Student.average)).filter(Student.id == Score.studentId).group_by(keyDict[key]).all()
     print(result)
-
-
