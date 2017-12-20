@@ -41,7 +41,7 @@ def get(studentId):
     for i in scoreResult:
         scoreList.append(i[4])
         creditsum+=i[2]
-        jidianList.append(jiDian(i[4]*xishu(i[2],i[3])))
+        jidianList.append(jiDian(i[4])*xishu(i[2],i[3])*i[2])
     return (sum(jidianList)/creditsum,sum(scoreList)/len(scoreList))
 
 def jiDian(mark):
