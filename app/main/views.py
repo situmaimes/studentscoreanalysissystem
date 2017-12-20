@@ -8,6 +8,7 @@ from sqlalchemy import func
 def bf_first_request():
     main.studentNum = db.session.query(func.count(Student.id)).scalar()
 
+@main.route("/")
 @main.route("/welcome")
 def index():
     #g.courseNum=db.session.query(Score.courseName, func.count(Score.courseName)).group_by(Score.courseName).first()[1]
@@ -42,10 +43,21 @@ def index():
 def students():
     return render_template("students.html",studentNum=main.studentNum)
 
+@main.route('/<location>/<int:id>', methods=["GET","POST"])
+def person(location, id):
+    g.id = id
+    info = Student.query.filter_by(id=id).all()[0]
+    score = Score.query.filter_by(studentId=id).all()
+    g.info = info
+    g.score = score
+    return render_template("person.html", studentNum=main.studentNum, g = g)
+
 @main.route("/lesson",methods=["GET","POST"])
 def lessons():
 
     return render_template("lessons.html",studentNum=main.studentNum)
+
+
 @main.route("/totalRank",methods=["GET","POST"])
 def totalRank():
     topscore = Student.query.order_by(Student.average.desc()).all()[:300]
@@ -53,6 +65,8 @@ def totalRank():
         stu.average = round(stu.average, 2)
     g.score = topscore
     return render_template("totalRank.html", studentNum = main.studentNum, g = g)
+
+
 @main.route("/specializedRank",methods=["GET","POST"])
 def specializedRank():
     software_score = Student.query.filter_by(majorName = '软件工程').order_by(Student.average.desc()).all()[:20]
@@ -85,7 +99,6 @@ def specializedRank():
     specializedScore.append({'name': '计算机科学与技术', 'score': cs_score})
     g.specializedScore = specializedScore
     return render_template("specializedRank.html", studentNum = main.studentNum, g = g)
-
 
 
 def queryAvgTwo(key):

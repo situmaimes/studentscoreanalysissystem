@@ -64,7 +64,7 @@
 							<a href="{{ url_for('.lessons') }}"><i class="fa fa-book nav_icon"></i>课程</a>
 						</li>
 						<li>
-							<a href="#"><i class="fa fa-envelope nav_icon"></i>数据分析<span class="fa arrow"></span></a>
+							<a href="#"><i class="fa fa-book nav_icon"></i>数据分析<span class="fa arrow"></span></a>
 							<ul class="nav nav-second-level collapse">
 								<li>
 									<a href="analysisStudent.html">学生</a>
@@ -107,11 +107,13 @@
 					</a>
 				</div>
 				<!--//logo-->
-				<div class="clearfix"> </div>
-			</div>
-			{% block search %}
+				{% block search %}
 
-			{% endblock %}
+				{% endblock %}
+				<div class="clearfix"> </div>
+			
+			</div>
+			
 			<div class="header-right">
 				<div class="profile_details">
 					<ul>
@@ -129,7 +131,7 @@
 					</ul>
 				</div>
 			</div>
-				<div class="clearfix"> </div>
+			<div class="clearfix"> </div>
 		</div>
 		<!-- //header-ends -->
 		<!-- main content start-->

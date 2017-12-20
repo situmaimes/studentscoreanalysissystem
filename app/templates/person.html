@@ -1,0 +1,123 @@
+{% extends "template.html" %}
+{% block main %}
+<div id="page-wrapper">
+			<div class="main-page">
+				<div class="row-one">
+					<div class="clearfix"> </div>
+				</div>
+				<div class="charts">
+				<h1>学生{{ g.id }}</h1>
+				</div>
+				<div class="row-one">
+
+					<div class="col-md-4 widget">
+						<div class="stats-left">
+							<h5>专业</h5>
+							<h4>{{g.info.majorName}}</h4>
+						</div>
+						<div class="stats-right">
+							<label>{{ g.info.majorId }}</label>
+						</div>
+						<div class="clearfix"> </div>
+					</div>
+					<div class="col-md-4 widget states-mdl">
+						<div class="stats-left">
+							<h5>班级</h5>
+							<h4>{{g.info.className}}</h4>
+						</div>
+						<div class="stats-right">
+							<label> {{ g.info.grade }}</label>
+						</div>
+						<div class="clearfix"> </div>
+					</div>
+					<div class="col-md-4 widget states-last">
+						<div class="stats-left">
+							<h5>均分</h5>
+							<h4>课程</h4>
+						</div>
+						<div class="stats-right">
+							<label>{{ g.info.average }}</label>
+						</div>
+						<div class="clearfix"> </div>
+					</div>
+					<div class="clearfix"> </div>
+				</div>
+				<div class="row">
+					<div class="charts panel-body widget-shadow">
+						<h4 class="title">各科成绩</h4>
+						<canvas id="bar"  height="800" width="8000" style="width: 8000px; height: 5000px;"></canvas>
+					</div>
+					<script>
+						var getRandomColor = function() {
+						  return (function(m,s,c){    
+						    return (c ? arguments.callee(m,s,c-1) : '#') +    
+						      s[m.floor(m.random() * 16)]    
+						  })(Math,'0123456789abcdef',5)    
+						} 
+						var barChartData = {
+							labels : [],
+							datasets : [
+								{
+									fillColor : getRandomColor(),
+									strokeColor : "#ef553a",
+									highlightFill: "#ef553a",
+									data : []
+								}
+							]
+							
+						};
+						{% for course in g.score %}
+						barChartData.labels.push('{{course.courseName}}');
+						{% endfor %}
+						{% for course in g.score %}
+						barChartData.datasets[0].data.push('{{course.mark}}');
+						{% endfor %}
+						new Chart(document.getElementById("bar").getContext("2d")).Bar(barChartData);
+					</script>
+				</div>
+
+				<div class="row">
+					 <div class="panel-body col stats-info widget-shadow">
+						<table class="table stats-table table-hover">
+							<thead>
+								<tr>
+									<th>课程名称</th>
+									<th>学分</th>
+									<th>学期</th>
+									<th>课程性质</th>
+									<th>得分</th>
+								</tr>
+							</thead>
+							{% for course in g.score %}
+							<tbody>
+								<tr>
+									<th scope="row">{{course.courseName}}</th>
+									<td><span class="label label-danger">{{course.credit}}</span></td>
+									<td>{{course.termName}}</td>
+									<td>{{course.courseDe}}</td>
+									<td>{{course.mark}}</td>
+								</tr>
+							</tbody>
+							{% endfor %}
+						</table>
+					</div>
+					<div class="clearfix"> </div>
+				</div>
+				<div class="clearfix"> </div>
+			</div>
+		</div>
+{% endblock %}
+{% block search %}
+<!--search-box-->
+				<div class="search-box" method="get">
+					<form class="input">
+						<input class="sb-search-input input__field--madoka" placeholder="键入学号查询以搜索..." type="search" id="input-31" name="search"/>
+						<label class="input__label" for="input-31">
+							<svg class="graphic" width="100%" height="100%" viewBox="0 0 404 77" preserveAspectRatio="none">
+								<path d="m0,0l404,0l0,77l-404,0l0,-77z"/>
+							</svg>
+						</label>
+					</form>
+				</div><!--//end-search-box-->
+			<div class="clearfix"> </div>
+{% endblock %}
