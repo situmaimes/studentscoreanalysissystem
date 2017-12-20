@@ -26,42 +26,23 @@ def processDB():
     for i in range(1,table.nrows):
         studentId = table.row_values(i)[0]
         student=db.session.query(Student).filter_by(id=studentId).first()
-        student.jidian,student.average,student.youxiu,student.bujige=get(student.id)
+        student.jidian,student.average=get(student.id)
     db.session.commit()
 
 
-
-
-
-
 def get(studentId):
-    scoreResult = db.session.query(Score.credit, Score.mark).filter(
+    scoreResult = db.session.query(Score.courseName, Score.termName, Score.credit, Score.courseDe, Score.mark).filter(
         Score.studentId == studentId).all()
     if scoreResult==[]:
-        return (None,None,None,None)
+        return (None,None)
     scoreList=[]
     jidianList=[]
-    credit=[]
-    youxiu=0
-    bujige=0
+    creditsum=0
     for i in scoreResult:
-        if i[1]>=90:
-            youxiu+=1
-        if i[1]<60:
-            bujige+=1
-        scoreList.append(i[1])
-        credit.append(i[0])
-        jidianList.append(jiDian(i[1])*xishu(i[0])*i[0])
-    return (sum(jidianList)/sum(credit),sum(scoreList)/len(scoreList),youxiu/len(scoreList),bujige/len(scoreList))
-
-
-
-
-
-
-
-
-
+        scoreList.append(i[4])
+        creditsum+=i[2]
+        jidianList.append(jiDian(i[4])*xishu(i[2],i[3])*i[2])
+    return (sum(jidianList)/creditsum,sum(scoreList)/len(scoreList))
 
 def jiDian(mark):
     if 90<=mark<=100:
@@ -87,12 +68,10 @@ def jiDian(mark):
     else:
         return 0
 
-
-
-
-
-def xishu(credit):
-    if credit>=4:
+def xishu(credit,courseDe):
+    if courseDe=="选":
+        return 0
+    elif credit>=4:
         return 1.2
     else:
         return 1.0
