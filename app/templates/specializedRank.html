@@ -1,43 +1,58 @@
 {% extends "template.html" %}
 {% block main %}
 <div id="page-wrapper">
-			<div class="main-page">
-				<div class="row-one">
-					<div class="clearfix"> </div>
-				</div>
-				<div class="charts">
-
-				</div>
-				<div class="row">
-					 <div class="col stats-info widget-shadow">
-						<table class="table stats-table table-hover">
-							<thead>
-								<tr>
-									<th>名称</th>
-									<th>课程代码</th>
-									<th>人数</th>
-									<th>平均分</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<th scope="row">高等数学</th>
-									<td>17100310622</td>
-									<td><span class="label label-danger">110</span></td>
-									<td><h5>95.4 <i class="label"></i></h5></td>
-								</tr>
-                                <tr>
-									<th scope="row">高等数学</th>
-									<td>17100310622</td>
-									<td><span class="label label-danger">110</span></td>
-									<td><h5>95.4 <i class="label"></i></h5></td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-					<div class="clearfix"> </div>
-				</div>
-				<div class="clearfix"> </div>
-			</div>
+	<div class="main-page">
+		<div class="row-one">
+			<div class="clearfix"> </div>
 		</div>
+
+			<ul id="myTabs" class="nav nav-tabs" role="tablist">
+				{% for major in g.specializedScore %}
+				<li role="presentation" class="{% if loop.index == 1 %}active{% endif %}">
+					<a href="#{{ loop.index }}" id="{{ loop.index }}-tab" role="tab" data-toggle="tab" aria-controls="{{ loop.index }}" aria-expanded="{% if loop.index == 1 %}true{% endif %}">{{ major.name }}</a>
+				</li>
+				{% endfor %}
+			</ul>
+				<div id="myTabContent" class="tab-content scrollbar1" tabindex="5001" style="overflow: hidden; outline: none;">
+					{% for major in g.specializedScore %}
+					<div role="tabpanel" class="tab-pane {% if loop.index == 1 %}active in{% endif %}" id="{{ loop.index }}" aria-labelledby="{{ loop.index }}-tab">
+
+						<div class="charts">
+							</div>
+							<div class="tables">
+
+								<div class="panel-body widget-shadow">
+									<table class="table stats-table table-hover">
+										<thead>
+											<tr>
+												<th>排名</th>
+												<th>学号</th>
+												<th>性别</th>
+												<th>平均分</th>
+											</tr>
+										</thead>
+										<tbody>
+											{% for student in major.score %}
+											<tr style="cursor: pointer;" onclick="window.open('https://www.baidu.com')">
+												<th scope="row">{{ loop.index }}</th>
+												<td>{{ student.id }}</td>
+												<td><span class="label label-success">{{ student.gender }}</span></td>
+												<td><h5>{{ student.average }} <i class="label"></i></h5></td>
+											</tr>
+											{% endfor %}
+											<script>
+
+											</script>
+										</tbody>
+									</table>
+								</div>
+								<div class="clearfix"> </div>
+							</div>
+						<div class="clearfix"> </div>
+					</div>
+				{% endfor %}
+			</div>
+		<div class="clearfix"> </div>
+	</div>
+</div>
 {% endblock %}
