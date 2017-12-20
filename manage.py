@@ -6,7 +6,7 @@ from prepare import processDB
 from flask_script import Manager, Shell
 
 app=create_app("development")
-if not os.path.exists(app.config["SQLALCHEMY_DATABASE_URI"].lstrip("sqlite:///")):
+if not os.path.exists("/"+app.config["SQLALCHEMY_DATABASE_URI"].lstrip("sqlite:///")):
     appContext = app.app_context()
     appContext.push()
     processDB()
