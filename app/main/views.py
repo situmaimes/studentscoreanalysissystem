@@ -54,8 +54,17 @@ def person(location, id):
 
 @main.route("/lesson",methods=["GET","POST"])
 def lessons():
+    course = db.session.query(Score.courseName,func.count(Score.id).label("courseNum"), \
+    func.avg(Score.mark).label('courseAvg'),  Score.courseId, \
+    Score.termName, Score.credit, Score.courseDe).group_by(Score.courseName).all()
+    courses = []
+    for lesson in course:
+        courses.append(list(lesson))
 
-    return render_template("lessons.html",studentNum=main.studentNum)
+    for lesson in courses:
+        lesson[2] = round(lesson[2], 2)
+    g.course = courses
+    return render_template("lessons.html",studentNum=main.studentNum, g = g)
 
 
 @main.route("/totalRank",methods=["GET","POST"])
@@ -63,6 +72,8 @@ def totalRank():
     topscore = Student.query.order_by(Student.average.desc()).all()[:300]
     for stu in topscore:
         stu.average = round(stu.average, 2)
+        stu.jidian = round(stu.jidian, 2)
+
     g.score = topscore
     return render_template("totalRank.html", studentNum = main.studentNum, g = g)
 
@@ -72,23 +83,29 @@ def specializedRank():
     software_score = Student.query.filter_by(majorName = '软件工程').order_by(Student.average.desc()).all()[:20]
     for stu in software_score:
         stu.average = round(stu.average, 2)
+        stu.jidian = round(stu.jidian, 2)
     civil_score = Student.query.filter_by(majorName = '土木工程').order_by(Student.average.desc()).all()[:20]
     for stu in civil_score:
         stu.average = round(stu.average, 2)
+        stu.jidian = round(stu.jidian, 2)
     info_score = Student.query.filter_by(majorName = '信息管理与信息系统').order_by(Student.average.desc()).all()[:20]
     for stu in info_score:
         stu.average = round(stu.average, 2)
+        stu.jidian = round(stu.jidian, 2)
     e_bussiness_score = Student.query.filter_by(majorName = '电子商务').order_by(Student.average.desc()).all()[:20]
     for stu in e_bussiness_score:
         stu.average = round(stu.average, 2)
+        stu.jidian = round(stu.jidian, 2)
     e_bussiness_s_score = Student.query.filter_by(majorName = '电子商务（专）').order_by(Student.average.desc()).all()[:20]
 
     net_score = Student.query.filter_by(majorName = '网络工程').order_by(Student.average.desc()).all()[:17]
     for stu in net_score:
         stu.average = round(stu.average, 2)
+        stu.jidian = round(stu.jidian, 2)
     cs_score = Student.query.filter_by(majorName = '计算机科学与技术').order_by(Student.average.desc()).all()[:20]
     for stu in cs_score:
         stu.average = round(stu.average, 2)
+        stu.jidian = round(stu.jidian, 2)
     specializedScore = []
     specializedScore.append({'name': '软件工程', 'score': software_score})
     specializedScore.append({'name': '土木工程', 'score': civil_score})
