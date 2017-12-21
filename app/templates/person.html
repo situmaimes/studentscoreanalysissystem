@@ -6,7 +6,7 @@
 					<div class="clearfix"> </div>
 				</div>
 				<div class="charts">
-				<h1>学生{{ g.id }}</h1>
+				<h1 style="margin-bottom: 1em; color: red;">学生{{ g.id }}</h1>
 				</div>
 				<div class="row-one">
 
@@ -32,11 +32,11 @@
 					</div>
 					<div class="col-md-4 widget states-last">
 						<div class="stats-left">
-							<h5>均分</h5>
-							<h4>课程</h4>
+							<h5>课程</h5>
+							<h4>绩点</h4>
 						</div>
 						<div class="stats-right">
-							<label>{{ g.info.average }}</label>
+							<label>{{ g.info.jidian }}</label>
 						</div>
 						<div class="clearfix"> </div>
 					</div>
@@ -45,7 +45,7 @@
 				<div class="row">
 					<div class="charts panel-body widget-shadow">
 						<h4 class="title">各科成绩</h4>
-						<canvas id="bar"  height="800" width="8000" style="width: 8000px; height: 5000px;"></canvas>
+						<canvas id="bar"  height="3000" width="8000" style="width: 8000px; height: 3000px;"></canvas>
 					</div>
 					<script>
 						var getRandomColor = function() {
@@ -67,7 +67,7 @@
 							
 						};
 						{% for course in g.score %}
-						barChartData.labels.push('{{course.courseName}}');
+						barChartData.labels.push('{{course.courseName}}'.substring(0, 4));
 						{% endfor %}
 						{% for course in g.score %}
 						barChartData.datasets[0].data.push('{{course.mark}}');
