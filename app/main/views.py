@@ -54,8 +54,17 @@ def person(location, id):
 
 @main.route("/lesson",methods=["GET","POST"])
 def lessons():
+    course = db.session.query(Score.courseName,func.count(Score.id).label("courseNum"), \
+    func.avg(Score.mark).label('courseAvg'),  Score.courseId, \
+    Score.termName, Score.credit, Score.courseDe).group_by(Score.courseName).all()
+    courses = []
+    for lesson in course:
+        courses.append(list(lesson))
 
-    return render_template("lessons.html",studentNum=main.studentNum)
+    for lesson in courses:
+        lesson[2] = round(lesson[2], 2)
+    g.course = courses
+    return render_template("lessons.html",studentNum=main.studentNum, g = g)
 
 
 @main.route("/totalRank",methods=["GET","POST"])

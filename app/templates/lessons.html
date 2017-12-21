@@ -6,10 +6,10 @@
 					<div class="clearfix"> </div>
 				</div>
 				<div class="charts">
-					
+
 				</div>
 				<div class="row">
-					 <div class="col stats-info widget-shadow">
+					 <div class="panel-body col stats-info widget-shadow">
 						<table class="table stats-table table-hover">
 							<thead>
 								<tr>
@@ -17,33 +17,23 @@
 									<th>课程代码</th>
 									<th>人数</th>
 									<th>平均分</th>
+									<th>学期</th>
+									<th>绩点</th>
+									<th>课程性质</th>
 								</tr>
 							</thead>
 							<tbody>
+								{% for lesson in g.course %}
 								<tr>
-									<th scope="row">高等数学</th>
-									<td>17100310622</td>
-									<td><span class="label label-danger">110</span></td>
-									<td><h5>95.4 <i class="label"></i></h5></td>
+									<th scope="row">{{ lesson[0] }}</th>
+									<td>{{ lesson[3] }}</td>
+									<td>{{ lesson[1] }}</td>
+									<td>{{ lesson[2] }}</td>
+									<td><h5>{{ lesson[4] }} <i class="label"></i></h5></td>
+									<td><h5>{{ lesson[5] }} <i class="label"></i></h5></td>
+									<td>{{ lesson[6] }}</td>
 								</tr>
-								<tr>
-									<th scope="row">线性代数</th>
-									<td>17100310654</td>
-									<td><span class="label label-danger">120</span></td>
-									<td><h5>94.3 <i class="label"></i></h5></td>
-								</tr>
-								<tr>
-									<th scope="row">大学物理</th>
-									<td>17100315452</td>
-									<td><span class="label label-danger">80</span></td>
-									<td><h5>89.5 <i class="label"></i></h5></td>
-								</tr>
-								<tr>
-									<th scope="row">C语言程序设计</th>
-									<td>'1710043222</td>
-									<td><span class="label label-danger">180</span></td>
-									<td><h5>87.5 <i class="label"></i></h5></td>
-								</tr>
+								{% endfor %}
 							</tbody>
 						</table>
 					</div>
