@@ -9,7 +9,7 @@
 				</div>
 
 				<div class="clearfix"> </div>
-				 {% if g.avg %}
+				 {% if g %}
 					<div class="row">
 					 <div class="col stats-info widget-shadow">
 						<table class="table stats-table table-hover">
@@ -74,7 +74,7 @@
                 {% endfor %}
                 {% endif %}
 				<div class="clearfix"> </div>
-                {% if g.results %}
+
 					<div class="row">
 					 <div class="col stats-info widget-shadow">
 						<table class="table stats-table table-hover">
@@ -103,12 +103,9 @@
 							</tbody>
 						</table>
 					</div>
+						<div class="clearfix"> </div>
 					</div>
 				{% endif %}
-				{% endif %}
-
-					</div>
-
 			</div>
 		</div>
 {% endblock %}
@@ -122,8 +119,7 @@
 					<form class="input" method="POST">
 {{ form.hidden_tag() }}
 						<label>{{form.info()}}</label>
-						<br/>
- {{ form.search(class="sb-search-input input__field--madoka",placeholder="键入查询",id="input-31") }}
+ {{ form.search(class="sb-search-input input__field--madoka",placeholder="键入查询以搜索...",id="input-31") }}
 						<label class="input__label" for="input-31">
 							<svg class="graphic" width="100%" height="100%" viewBox="0 0 404 77" preserveAspectRatio="none">
 								<path d="m0,0l404,0l0,77l-404,0l0,-77z"/>

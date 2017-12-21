@@ -34,18 +34,53 @@
 									<td>{{student.majorName}}</td>
 									<td>{{student.className}}</td>
 									<td>{{student.grade}}</td>
-									<td><h5>{{student.average |round(2)}} <i class="label"></i></h5></td>
-									<td><h5>{{student.jidian|round(2)}} <i class="label"></i></h5></td>
-									<td><h5>{{student.youxiu|round(2)}} <i class="label"></i></h5></td>
-									<td><h5>{{student.bujige|round(2)}} <i class="label"></i></h5></td>
+									<td><h5>{{student.average}} <i class="label"></i></h5></td>
+									<td><h5>{{student.jidian}} <i class="label"></i></h5></td>
+									<td><h5>{{student.youxiu}} <i class="label"></i></h5></td>
+									<td><h5>{{student.bujige}} <i class="label"></i></h5></td>
 								</tr>
 							</tbody>
 						</table>
 					</div>
 
 					<div class="clearfix"> </div>
+					<div class="row">
+					 <div class="col stats-info widget-shadow">
+						<table class="table stats-table table-hover">
+							<thead>
+								<tr>
+									<th>学号</th>
+									<th>性别</th>
+									<th>学院</th>
+									<th>专业</th>
+									<th>班级</th>
+									<th>年级</th>
+									<th>平均分</th>
+									<th>绩点</th>
+									<th>优秀率</th>
+									<th>不及格率</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th>{{student.id}}</th>
+									<td>{{student.gender}}</td>
+									<td>{{student.departmentName}}</td>
+									<td>{{student.majorName}}</td>
+									<td>{{student.className}}</td>
+									<td>{{student.grade}}</td>
+									<td><h5>{{student.average}} <i class="label"></i></h5></td>
+									<td><h5>{{student.jidian}} <i class="label"></i></h5></td>
+									<td><h5>{{student.youxiu}} <i class="label"></i></h5></td>
+									<td><h5>{{student.bujige}} <i class="label"></i></h5></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+						<div class="clearfix"> </div>
 					</div>
 					<div class="clearfix"> </div>
+				<div class="clearfix"> </div>
 				{% if courses %}
 				<div class="row">
 					 <div class="col stats-info widget-shadow">
@@ -72,11 +107,17 @@
 							</tbody>
 						</table>
 					 </div>
+
 					<div class="clearfix"> </div>
 				</div>
-				{% endif %}
+					{% endif %}
 				{% endif %}
 
+
+
+
+
+				<div class="clearfix"> </div>
 			</div>
 		</div>
 {% endblock %}
@@ -89,7 +130,7 @@
 				<div class="search-box">
 					<form class="input" method="post">
 {{ form.hidden_tag() }}
- {{ form.studentId(class="sb-search-input input__field--madoka",placeholder="键入学号查询",id="input-31") }}
+ {{ form.studentId(class="sb-search-input input__field--madoka",placeholder="键入学号查询以搜索...",id="input-31") }}
 						<label class="input__label" for="input-31">
 							<svg class="graphic" width="100%" height="100%" viewBox="0 0 404 77" preserveAspectRatio="none">
 								<path d="m0,0l404,0l0,77l-404,0l0,-77z"/>
