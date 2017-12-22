@@ -1,69 +1,112 @@
 {% extends "template.html" %}
 {% block main %}
-		<div id="page-wrapper">
+<div id="page-wrapper">
 			<div class="main-page">
 				<div class="row-one">
 					<div class="clearfix"> </div>
 				</div>
 				<div class="charts">
-					
 				</div>
+                {% if courses %}
+
 				<div class="row">
 					 <div class="col stats-info widget-shadow">
 						<table class="table stats-table table-hover">
 							<thead>
 								<tr>
-									<th>名称</th>
 									<th>课程代码</th>
+									<th>课程名称</th>
 									<th>人数</th>
+									<th>学期名称</th>
+									<th>学分</th>
+									<th>课程性质</th>
 									<th>平均分</th>
 								</tr>
 							</thead>
 							<tbody>
+							{% for course in courses %}
 								<tr>
-									<th scope="row">高等数学</th>
-									<td>17100310622</td>
-									<td><span class="label label-danger">110</span></td>
-									<td><h5>95.4 <i class="label"></i></h5></td>
+									<th>{{course.courseId}}</th>
+									<td>{{course.courseName}}</td>
+									<td>{{course.nums}}</td>
+									<td>{{course.termName}}</td>
+									<td><h5>{{course.credit}}<i class="label"></i></h5></td>
+									<td>{{course.courseDe}}</td>
+									<td><h5>{{course.avg | round(2)}} <i class="label"></i></h5></td>
 								</tr>
-								<tr>
-									<th scope="row">线性代数</th>
-									<td>17100310654</td>
-									<td><span class="label label-danger">120</span></td>
-									<td><h5>94.3 <i class="label"></i></h5></td>
-								</tr>
-								<tr>
-									<th scope="row">大学物理</th>
-									<td>17100315452</td>
-									<td><span class="label label-danger">80</span></td>
-									<td><h5>89.5 <i class="label"></i></h5></td>
-								</tr>
-								<tr>
-									<th scope="row">C语言程序设计</th>
-									<td>'1710043222</td>
-									<td><span class="label label-danger">180</span></td>
-									<td><h5>87.5 <i class="label"></i></h5></td>
-								</tr>
+							{% endfor %}
 							</tbody>
 						</table>
 					</div>
+
 					<div class="clearfix"> </div>
+					</div>
+				{% endif %}
+					<div class="clearfix"> </div>
+				{% if students %}
+				<div class="row">
+					 <div class="col stats-info widget-shadow">
+						<table class="table stats-table table-hover">
+							<thead>
+								<tr>
+									<th>学号</th>
+									<th>课程名称</th>
+									<th>教学班</th>
+									<th>学期名称</th>
+									<th>学分</th>
+									<th>课程性质</th>
+									<th>成绩分</th>
+								</tr>
+							</thead>
+							<tbody>
+							{% for student in students %}
+								<tr>
+									<th>{{student.studentId}}</th>
+									<td>{{student.courseName}}</td>
+									<td>{{student.classId}}</td>
+									<td>{{student.termName}}</td>
+									<td><h5>{{student.credit}}<i class="label"></i></h5></td>
+									<td>{{student.courseDe}}</td>
+									<td><h5>{{student.mark}} <i class="label"></i></h5></td>
+								</tr>
+							{% endfor %}
+							</tbody>
+						</table>
+					</div>
+
+					<div class="clearfix"> </div>
+					</div>
+				{% endif %}
+				<div class="clearfix"> </div>
+
 				</div>
+
+
+
+
+
+
 				<div class="clearfix"> </div>
 			</div>
-		</div>
+
 {% endblock %}
+
+
+
+
 {% block search %}
 <!--search-box-->
-				<div class="search-box" method="get">
-					<form class="input">
-						<input class="sb-search-input input__field--madoka" placeholder="键入以搜索..." type="search" id="input-31" name="search"/>
-						<label class="input__label" for="input-31">
+				<div class="search-box">
+					<form class="input" method="post">
+{{ form.hidden_tag() }}
+ {{ form.courseName(class="sb-search-input input__field--madoka",placeholder="键入课程名称查询以搜索...",id="input-2") }}
+						<label class="input__label" for="input-2">
 							<svg class="graphic" width="100%" height="100%" viewBox="0 0 404 77" preserveAspectRatio="none">
 								<path d="m0,0l404,0l0,77l-404,0l0,-77z"/>
 							</svg>
 						</label>
-					</form>
+</form>
+
 				</div><!--//end-search-box-->
 			<div class="clearfix"> </div>
 {% endblock %}
