@@ -59,7 +59,7 @@
 							<tbody>
 								<tr>
 									<th>{{other["name"]}}</th>\
-									<td><h5>{{other["avg"]|round(2) }} <i class="label"></i></h5></td>
+									<td><h5>{% if other["avg"] %}{{other["avg"]|round(2) }} {% endif %}<i class="label"></i></h5></td>
 									<td><h5>{{other["num"]|round(2)}} <i class="label"></i></h5></td>
 									<td><h5>{{other["youxiu"]|round(2)}} <i class="label"></i></h5></td>
 									<td><h5>{{other["bujige"]|round(2)}} <i class="label"></i></h5></td>
