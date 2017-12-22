@@ -196,7 +196,8 @@ def scoreAnalysis(key,value):
         else:
             youxiulv = youxiu / len(results)
             bujigelv = bujige / len(results)
-        return (1,avg,results,youxiu,bujige,nums,youxiulv,bujigelv,None)
+        result = [{"name":args[0].arg,"avg":avg,"results":results,"youxiu":youxiulv,"bujige":bujigelv,"youxiulv":youxiulv,"bujigelv":bujigelv,"num":len(results)}]
+        return (1,avg,results,youxiu,bujige,nums,youxiu,bujige,result)
     else:
         zongarg = db.session.query(func.avg(Score.mark)).filter(maps[key].like("%" + value + "%"),
                                                                 Student.id == Score.studentId).scalar()
@@ -222,7 +223,7 @@ def scoreAnalysis(key,value):
                                                                        Student.id == Score.studentId).order_by(db.desc(Score.mark)).all(),
             "youxiu":db.session.query(func.count("*")).filter(maps[key]==i.arg,
                                                           Student.id == Score.studentId, Score.mark >= 90).scalar(),
-            "bujige": db.session.query(func.count("*")).filter(maps[key].like("%" + value + "%"),
+            "bujige": db.session.query(func.count("*")).filter(maps[key]==i.arg,
                                                                           Student.id == Score.studentId,
                                                                           Score.mark < 60).scalar()})
         for i in results:
