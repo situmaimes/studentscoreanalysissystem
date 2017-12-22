@@ -29,21 +29,21 @@
 												<th>学号</th>
 												<th>性别</th>
 												<th>平均分</th>
+												<th>绩点</th>
 											</tr>
 										</thead>
 										<tbody>
 											{% for student in major.score %}
-											<tr style="cursor: pointer;" onclick="open_personal_page({{ student.id }})">
+											<tr style="cursor: pointer;">
 												<th scope="row">{{ loop.index }}</th>
 												<td>{{ student.id }}</td>
 												<td><span class="label label-success">{{ student.gender }}</span></td>
-												<td><h5>{{ student.average }} <i class="label"></i></h5></td>
+												<td><h5>{%if student.average%}{{ student.average|round(2) }} {%endif%}<i class="label"></i></h5></td>
+												<td><h5>{%if student.jidian %}{{ student.jidian|round(2)}} {%endif%}<i class="label"></i></h5></td>
 											</tr>
 											{% endfor %}
 											<script>
-												function open_personal_page(id) {
-												window.open(window.location.href + '/' + id);
-												}
+
 											</script>
 										</tbody>
 									</table>

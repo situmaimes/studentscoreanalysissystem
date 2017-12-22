@@ -1,0 +1,202 @@
+{% extends "template.html" %}
+{% block main %}
+
+<div id="page-wrapper">
+			<div class="main-page">
+				<div class="row-one">
+					<div class="clearfix"> </div>
+				</div>
+				<div class="charts">
+				</div>
+				{% if student %}
+                <div class="row">
+					 <div class="col stats-info widget-shadow">
+						<table class="table stats-table table-hover">
+							<thead>
+								<tr>
+									<th>学号</th>
+									<th>性别</th>
+									<th>学院</th>
+									<th>专业</th>
+									<th>班级</th>
+									<th>年级</th>
+								</tr>
+							</thead>
+							<tbody>
+
+							{% if student[0] %}
+								<tr>
+									<th>{{student[0].id}}</th>
+									<td>{{student[0].gender}}</td>
+									<td>{{student[0].departmentName}}</td>
+									<td>{{student[0].majorName}}</td>
+									<td>{{student[0].className}}</td>
+									<td>{{student[0].grade}}</td>
+								</tr>
+							{% endif %}
+							{% if student[1] %}
+                            <tr>
+									<th>{{student[1].id}}</th>
+									<td>{{student[1].gender}}</td>
+									<td>{{student[1].departmentName}}</td>
+									<td>{{student[1].majorName}}</td>
+									<td>{{student[1].className}}</td>
+									<td>{{student[1].grade}}</td>
+
+								</tr>
+							{% endif %}
+
+							</tbody>
+						</table>
+					</div>
+
+			</div>
+				<div class="clearfix"> </div>
+                <div class="row">
+					 <div class="col stats-info widget-shadow">
+						<table class="table stats-table table-hover">
+							<thead>
+								<tr>
+									<th>学号</th>
+									<th>平均分</th>
+                                    <th>绩点</th>
+									<th>修读总课程数</th>
+									<th>优秀课程数</th>
+									<th>不及格课程数</th>
+									<th>优秀比例</th>
+                                    <th>不及格比例</th>
+								</tr>
+							</thead>
+							<tbody>
+
+							{% if student[0] %}
+								<tr>
+									<th>{{student[0].id}}</th>
+									<td><h5>{{student[0].average |round(2)}} <i class="label"></i></h5></td>
+                                    <td><h5>{{student[0].jidian|round(2)}} <i class="label"></i></h5></td>
+									<td><h5>{{student[0].courseNums}} <i class="label"></i></h5></td>
+									<td><h5>{{student[0].youxiuNums}} <i class="label"></i></h5></td>
+									<td><h5>{{student[0].bujigeNums}} <i class="label"></i></h5></td>
+                                    <td><h5>{{student[0].youxiu|round(2)}} <i class="label"></i></h5></td>
+                                    <td><h5>{{student[0].bujige|round(2)}} <i class="label"></i></h5></td>
+								</tr>
+							{% endif %}
+							{% if student[1] %}
+                            <tr>
+									<th>{{student[1].id}}</th>
+									<td><h5>{{student[1].average |round(2)}} <i class="label"></i></h5></td>
+                                    <td><h5>{{student[1].jidian|round(2)}} <i class="label"></i></h5></td>
+									<td><h5>{{student[1].courseNums|round(2)}} <i class="label"></i></h5></td>
+									<td><h5>{{student[1].youxiuNums}} <i class="label"></i></h5></td>
+									<td><h5>{{student[1].bujigeNums}} <i class="label"></i></h5></td>
+                                    <td><h5>{{student[1].youxiu|round(2)}} <i class="label"></i></h5></td>
+                                    <td><h5>{{student[1].bujige|round(2)}} <i class="label"></i></h5></td>
+								</tr>
+							{% endif %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="clearfix"> </div>
+				{% if student[0] %}
+				<div class="row">
+					<div class="col stats-info widget-shadow">
+                         <label>{{student[0].id}}的优势课程</label>
+						<table class="table stats-table table-hover">
+							<thead>
+								<tr>
+									<th>学号</th>
+									<th>课程名称</th>
+                                    <th>学期</th>
+									<th>学分</th>
+									<th>课程性质</th>
+									<th>分数</th>
+								</tr>
+							</thead>
+							<tbody>
+                            {% for i in student[0].youxiuCourses %}
+								<tr>
+									<th>{{student[0].id}}</th>
+                                     <th>{{i.courseName}}</th>
+									<td>{{i.termName}}</td>
+                                    <td>{{i.credit}}</td>
+									<td>{{i.courseDe}}</td>
+									<td><h5>{{i.mark}} <i class="label"></i></h5></td>
+								</tr>
+							{% endfor %}
+							</tbody>
+						</table>
+
+					</div>
+
+			</div>
+				{% endif %}
+				<div class="clearfix"> </div>
+				 {% if student[1] %}
+				<div class="row">
+					 <div class="col stats-info widget-shadow">
+
+                         <label>{{student[1].id}}的优势课程</label>
+						<table class="table stats-table table-hover">
+							<thead>
+								<tr>
+									<th>学号</th>
+									<th>课程名称</th>
+                                    <th>学期</th>
+									<th>学分</th>
+									<th>课程性质</th>
+									<th>分数</th>
+								</tr>
+							</thead>
+							<tbody>
+                            {% for i in student[1].youxiuCourses %}
+								<tr>
+									<th>{{student[1].id}}</th>
+                                     <th>{{i.courseName}}</th>
+									<td>{{i.termName}}</td>
+                                    <td>{{i.credit}}</td>
+									<td>{{i.courseDe}}</td>
+									<td><h5>{{i.mark}} <i class="label"></i></h5></td>
+								</tr>
+							{% endfor %}
+							</tbody>
+						</table>
+
+					</div>
+				</div>
+				{% endif %}
+ 				{% endif %}
+			</div>
+		</div>
+
+{% endblock %}
+
+
+
+
+{% block search %}
+<!--search-box-->
+				<div class="search-box">
+					<form class="input" method="POST">
+{{ form.hidden_tag() }}
+ {{ form.Name1(placeholder="键入学号",id="input-1") }}
+						<label class="input__label" for="input-1">
+							<svg class="graphic" width="100%" height="100%" viewBox="0 0 404 77" preserveAspectRatio="none">
+								<path d="m0,0l404,0l0,77l-404,0l0,-77z"/>
+							</svg>
+						</label>
+                        {{ form.Name2(placeholder="输入学号",id="input-2") }}
+						<label class="input__label" for="input-2">
+							<svg class="graphic" width="100%" height="100%" viewBox="0 0 404 77" preserveAspectRatio="none">
+								<path d="m0,0l404,0l0,77l-404,0l0,-77z"/>
+							</svg>
+						</label>
+						<div style="display:none;">
+						{{ form.submit()}}
+						</div>
+
+</form>
+
+				</div><!--//end-search-box-->
+			<div class="clearfix"> </div>
+{% endblock %}

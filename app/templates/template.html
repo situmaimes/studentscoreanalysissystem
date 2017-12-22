@@ -41,14 +41,14 @@
 							<a href="{{ url_for('.index') }}" class="active"><i class="fa fa-home nav_icon"></i>概览</a>
 						</li>
 						<li>
-							<a href="#">
+							<a href="{{ url_for('.student') }}">
 								<i class="fa fa-cogs nav_icon"></i>学生
 								<span class="nav-badge">{{ studentNum }}</span>
 								<span class="fa arrow"></span>
 							</a>
 							<ul class="nav nav-second-level collapse">
 								<li>
-									<a href="{{ url_for('.students') }}">基本信息查询</a>
+									<a href="{{ url_for('.student') }}">基本信息查询</a>
 								</li>
 								<li>
 									<a href="{{ url_for('.totalRank') }}">总排名</a>
@@ -61,28 +61,31 @@
 							<!-- /nav-second-level -->
 						</li>
 						<li>
-							<a href="{{ url_for('.lessons') }}"><i class="fa fa-book nav_icon"></i>课程</a>
-						</li>
-						<li>
-							<a href="#"><i class="fa fa-book nav_icon"></i>数据分析<span class="fa arrow"></span></a>
+							<a href="{{ url_for('.course') }}">
+								<i class="fa fa-cogs nav_icon"></i>课程<span class="fa arrow"></span>
+							</a>
 							<ul class="nav nav-second-level collapse">
 								<li>
-									<a href="analysisStudent.html">学生</a>
+									<a href="{{ url_for('.course') }}">基本信息查询</a>
 								</li>
 								<li>
-									<a href="analysisLesson.html">课程</a>
+									<a href="{{ url_for('.courseRank') }}">平均分排名</a>
 								</li>
+
 							</ul>
-							<!-- //nav-second-level -->
+							<!-- /nav-second-level -->
 						</li>
 						<li>
-							<a href="#"><i class="fa fa-book nav_icon"></i>对比 <span class="fa arrow"></span></a>
+							<a href="{{ url_for('.score') }}"><i class="fa fa-home nav_icon"></i>成绩分析</a>
+						</li>
+						<li>
+							<a href="#"><i class="fa fa-home nav_icon"></i>对比 <span class="fa arrow"></span></a>
 							<ul class="nav nav-second-level collapse">
 								<li>
-									<a href="comparisionStudent.html">学生</a>
+									<a href="{{ url_for('.compareStudent') }}">学生对比</a>
 								</li>
 								<li>
-									<a href="comparisionLesson.html">课程</a>
+									<a href="{{ url_for('.compareCourse') }}">课程对比</a>
 								</li>
 							</ul>
 							<!-- /nav-second-level -->
@@ -107,14 +110,10 @@
 					</a>
 				</div>
 				<!--//logo-->
-				{% block search %}
-
-				{% endblock %}
 				<div class="clearfix"> </div>
-			
 			</div>
-			
-			<div class="header-right">
+			{% block search %}
+<div class="header-right">
 				<div class="profile_details">
 					<ul>
 						<li class="dropdown profile_details_drop">
@@ -131,7 +130,9 @@
 					</ul>
 				</div>
 			</div>
-			<div class="clearfix"> </div>
+			{% endblock %}
+
+				<div class="clearfix"> </div>
 		</div>
 		<!-- //header-ends -->
 		<!-- main content start-->

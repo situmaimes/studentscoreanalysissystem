@@ -1,0 +1,136 @@
+{% extends "template.html" %}
+{% block main %}
+<div id="page-wrapper">
+			<div class="main-page">
+				<div class="row-one">
+					<div class="clearfix"> </div>
+				</div>
+				<div class="charts">
+				</div>
+
+				<div class="clearfix"> </div>
+				 {% if g.avg %}
+					<div class="row">
+					 <div class="col stats-info widget-shadow">
+						<table class="table stats-table table-hover">
+							<thead>
+								<tr>
+									<th>{{g.info}}</th>
+									<th>平均分</th>
+									<th>总课程数</th>
+									<th>优秀课程数</th>
+									<th>不及格课程数</th>
+									<th>优秀比例</th>
+									<th>不及格比例</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th>{{g.search}}</th>\
+									<td><h5>{{g.avg |round(2) }} <i class="label"></i></h5></td>
+									<td><h5>{{g.nums|round(2)}} <i class="label"></i></h5></td>
+									<td><h5>{{g.youxiu|round(2)}} <i class="label"></i></h5></td>
+									<td><h5>{{g.bujige|round(2)}} <i class="label"></i></h5></td>
+									<td><h5>{{g.youxiulv|round(2)}} <i class="label"></i></h5></td>
+									<td><h5>{{g.bujigelv|round(2)}} <i class="label"></i></h5></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+						<div class="clearfix"> </div>
+					</div>
+					<div class="clearfix"> </div>
+                {% if g.others %}
+                {% for other in g.others %}
+                <div class="row">
+					 <div class="col stats-info widget-shadow">
+						<table class="table stats-table table-hover">
+							<thead>
+								<tr>
+									<th>{{ g.info }}</th>
+									<th>平均分</th>
+									<th>总课程数</th>
+									<th>优秀课程数</th>
+									<th>不及格课程数</th>
+									<th>优秀比例</th>
+									<th>不及格比例</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th>{{other["name"]}}</th>\
+									<td><h5>{{other["avg"]|round(2) }} <i class="label"></i></h5></td>
+									<td><h5>{{other["num"]|round(2)}} <i class="label"></i></h5></td>
+									<td><h5>{{other["youxiu"]|round(2)}} <i class="label"></i></h5></td>
+									<td><h5>{{other["bujige"]|round(2)}} <i class="label"></i></h5></td>
+									<td><h5>{{other["youxiulv"]|round(2)}} <i class="label"></i></h5></td>
+									<td><h5>{{other["bujigelv"]|round(2)}} <i class="label"></i></h5></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+						<div class="clearfix"> </div>
+					</div>
+                {% endfor %}
+                {% endif %}
+				<div class="clearfix"> </div>
+                {% if g.results %}
+					<div class="row">
+					 <div class="col stats-info widget-shadow">
+						<table class="table stats-table table-hover">
+							<thead>
+								<tr>
+									<th>学号</th>
+									<th>课程名称</th>
+									<th>学期名称</th>
+									<th>学分数</th>
+									<th>课程性质</th>
+									<th>分数</th>
+								</tr>
+							</thead>
+							<tbody>
+                            {% for result in g.results[:20] %}
+								<tr>
+									<th>{{result.studentId}}</th>
+	                                <th>{{result.courseName}}</th>
+                                    <th>{{result.termName}}</th>
+                                    <th>{{result.credit}}</th>
+                                    <th>{{result.courseDe}}</th>
+									<td><h5>{{result.mark}} <i class="label"></i></h5></td>
+
+								</tr>
+                            {% endfor %}
+							</tbody>
+						</table>
+					</div>
+					</div>
+				{% endif %}
+				{% endif %}
+
+					</div>
+
+			</div>
+		</div>
+{% endblock %}
+
+
+
+
+{% block search %}
+<!--search-box-->
+				<div class="search-box">
+					<form class="input" method="POST">
+{{ form.hidden_tag() }}
+						<label>{{form.info()}}</label>
+						<br/>
+ {{ form.search(class="sb-search-input input__field--madoka",placeholder="键入查询",id="input-31") }}
+						<label class="input__label" for="input-31">
+							<svg class="graphic" width="100%" height="100%" viewBox="0 0 404 77" preserveAspectRatio="none">
+								<path d="m0,0l404,0l0,77l-404,0l0,-77z"/>
+							</svg>
+						</label>
+</form>
+
+				</div><!--//end-search-box-->
+			<div class="clearfix"> </div>
+{% endblock %}

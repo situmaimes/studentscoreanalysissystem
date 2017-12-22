@@ -1,0 +1,198 @@
+{% extends "template.html" %}
+{% block main %}
+
+<div id="page-wrapper">
+			<div class="main-page">
+				<div class="row-one">
+					<div class="clearfix"> </div>
+				</div>
+				<div class="charts">
+				</div>
+				{% if courses %}
+                {% if courses[0] %}
+                <div class="row">
+					 <div class="col stats-info widget-shadow">
+						<table class="table stats-table table-hover">
+							<thead>
+								<tr>
+									<th>课程名称</th>
+									<th>教学班</th>
+									<th>学期</th>
+									<th>学分</th>
+									<th>课程性质</th>
+                                    <th>课程人数</th>
+                                    <th>平均分</th>
+								</tr>
+							</thead>
+							<tbody>
+							{% for course in  courses[0] %}
+								<tr>
+									<th>{{course.courseName}}</th>
+									<td>{{course.classId}}</td>
+									<td>{{course.termName}}</td>
+									<td>{{course.credit}}</td>
+									<td>{{course.courseDe}}</td>
+									<td>{{course.studentNums}}</td>
+                                    <td>{{course.avg  | round(2)}}</td>
+
+								</tr>
+							{% endfor %}
+
+
+
+							</tbody>
+						</table>
+					</div>
+
+			</div>
+                {% endif %}
+                <div class="clearfix"> </div>
+
+                {% if courses[1] %}
+                <div class="row">
+					 <div class="col stats-info widget-shadow">
+						<table class="table stats-table table-hover">
+							<thead>
+								<tr>
+									<th>课程名称</th>
+									<th>教学班</th>
+									<th>学期</th>
+									<th>学分</th>
+									<th>课程性质</th>
+                                    <th>课程人数</th>
+                                    <th>平均分</th>
+								</tr>
+							</thead>
+							<tbody>
+							{% for course in  courses[1] %}
+								<tr>
+									<th>{{course.courseName}}</th>
+									<td>{{course.classId}}</td>
+									<td>{{course.termName}}</td>
+									<td>{{course.credit}}</td>
+									<td>{{course.courseDe}}</td>
+									<td>{{course.studentNums}}</td>
+                                    <td>{{course.avg | round(2)}}</td>
+								</tr>
+							{% endfor %}
+
+
+
+							</tbody>
+						</table>
+					</div>
+
+			</div>
+                {% endif %}
+                <div class="clearfix"> </div>
+               {% if courses[0] %}
+                {% for course in courses[0] %}
+                <div class="row">
+					 <div class="col stats-info widget-shadow">
+						 <label>{{course.courseName}}的优秀学生</label>
+						<table class="table stats-table table-hover">
+							<thead>
+								<tr>
+									<th>学号</th>
+									<th>教学班</th>
+									<th>学期</th>
+									<th>学分</th>
+									<th>课程性质</th>
+                                    <th>分数</th>
+								</tr>
+							</thead>
+							<tbody>
+							{% for course in  course.youxiuStudents %}
+								<tr>
+									<th>{{course.studentId}}</th>
+									<td>{{course.classId}}</td>
+									<td>{{course.termName}}</td>
+									<td>{{course.credit}}</td>
+									<td>{{course.courseDe}}</td>
+                                    <td>{{course.mark}}</td>
+
+								</tr>
+							{% endfor %}
+
+
+
+							</tbody>
+						</table>
+					</div>
+
+			</div>
+                {% endfor %}
+                {% endif %}
+                <div class="clearfix"> </div>
+                {% if courses[1] %}
+                {% for course in courses[1] %}
+                <div class="row">
+					 <div class="col stats-info widget-shadow">
+						 <label>{{course.courseName}}的优秀学生</label>
+						<table class="table stats-table table-hover">
+							<thead>
+								<tr>
+									<th>学号</th>
+									<th>教学班</th>
+									<th>学期</th>
+									<th>学分</th>
+									<th>课程性质</th>
+                                    <th>分数</th>
+								</tr>
+							</thead>
+							<tbody>
+							{% for course in  course.youxiuStudents %}
+								<tr>
+									<th>{{course.studentId}}</th>
+									<td>{{course.classId}}</td>
+									<td>{{course.termName}}</td>
+									<td>{{course.credit}}</td>
+									<td>{{course.courseDe}}</td>
+                                    <td>{{course.mark}}</td>
+
+								</tr>
+							{% endfor %}
+
+
+
+							</tbody>
+						</table>
+					</div>
+
+			</div>
+                {% endfor %}
+                {% endif %}
+                <div class="clearfix"> </div>
+{% endif %}
+		</div>
+</div>
+{% endblock %}
+
+
+
+
+{% block search %}
+<!--search-box-->
+				<div class="search-box">
+					<form class="input" method="POST">
+{{ form.hidden_tag() }}
+ {{ form.Name1(placeholder="键入课程名称查询",id="input-1") }}
+						<label class="input__label" for="input-1">
+							<svg class="graphic" width="100%" height="100%" viewBox="0 0 404 77" preserveAspectRatio="none">
+								<path d="m0,0l404,0l0,77l-404,0l0,-77z"/>
+							</svg>
+						</label>
+                        {{ form.Name2(placeholder="键入课程名称查询",id="input-2") }}
+						<label class="input__label" for="input-2">
+							<svg class="graphic" width="100%" height="100%" viewBox="0 0 404 77" preserveAspectRatio="none">
+								<path d="m0,0l404,0l0,77l-404,0l0,-77z"/>
+							</svg>
+						</label>
+						<div style="display:none;">
+						{{ form.submit()}}
+						</div>
+</form>
+
+				</div><!--//end-search-box-->
+			<div class="clearfix"> </div>
+{% endblock %}

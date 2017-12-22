@@ -13,7 +13,9 @@ class Student(db.Model):
     grade=db.Column(db.String(8))
     scores=db.relationship("Score",lazy='dynamic')
     average=db.Column(db.Float)
-    jidian=db.Column(db.Float)
+    jidian = db.Column(db.Float)
+    youxiu = db.Column(db.Float)
+    bujige = db.Column(db.Float)
 
     def __repr__(self):
         return "<Student %r %r %r %r %r %r %r %r >"%\
