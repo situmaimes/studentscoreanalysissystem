@@ -42,118 +42,70 @@
 						<h4 class="title">性别比例</h4>
 						<canvas id="pie" height="300" width="600"> </canvas>
 					</div>
-					<div class="col-md-6 charts-grids widget states-mdl">
-						<h4 class="title">班级人数</h4>
-						<canvas id="bar" height="300" width="600"> </canvas>
+					<div class="col-md-6 stats-info states-mdl widget">
+						<div class="stats-title">
+							<h4 class="title">专业分布</h4>
+						</div>
+						<div class="stats-body">
+							<ul class="list-unstyled">
+								{% for classes in g.majors %}
+								<li>{{ classes[0] }} <span class="pull-right">{{ classes[1] }}%</span>
+									<div class="progress progress-striped active progress-right">
+										<div class="bar green" style="width:{{ classes[1] }}%;"></div>
+									</div>
+								</li>
+								{% endfor %}
+							</ul>
+						</div>
 					</div>
 
 					<div class="clearfix"> </div>
 							 <script>
-								var barChartData = {
-									labels : ["软件1班","土木1班","土木2班","计算机1班","土木3班","计算机2班","土木4班"],
-									datasets : [
-										{
-											fillColor : "rgba(233, 78, 2, 0.9)",
-											strokeColor : "rgba(233, 78, 2, 0.9)",
-											highlightFill: "#e94e02",
-											highlightStroke: "#e94e02",
-											data : [65,59,90,81,56,55,40]
-										},
-										{
-											fillColor : "rgba(79, 82, 186, 0.9)",
-											strokeColor : "rgba(79, 82, 186, 0.9)",
-											highlightFill: "#4F52BA",
-											highlightStroke: "#4F52BA",
-											data : [40,70,55,20,45,70,60]
-										}
-									]
-								};
 								var pieData = [
 										{
-											value: 90,
+											value: {{ g.male }},
 											color:"rgba(233, 78, 2, 1)",
 											label: "男"
 										},
 										{
-											value : 50,
+											value : {{ g.female }},
 											color : "rgba(242, 179, 63, 1)",
 											label: "女"
 										}
 									];
 
-							new Chart(document.getElementById("bar").getContext("2d")).Bar(barChartData);
+							//new Chart(document.getElementById("bar").getContext("2d")).Bar(barChartData);
 							new Chart(document.getElementById("pie").getContext("2d")).Pie(pieData);
 
 							</script>
 
 				</div>
 				<div class="row">
-					<div class="col-md-4 stats-info widget">
-						<div class="stats-title">
-							<h4 class="title">专业分布</h4>
-						</div>
-						<div class="stats-body">
-							<ul class="list-unstyled">
-								<li>计算机科学与技术 <span class="pull-right">85%</span>
-									<div class="progress progress-striped active progress-right">
-										<div class="bar green" style="width:85%;"></div>
-									</div>
-								</li>
-								<li>土木工程 <span class="pull-right">35%</span>
-									<div class="progress progress-striped active progress-right">
-										<div class="bar yellow" style="width:35%;"></div>
-									</div>
-								</li>
-								<li>网络工程 <span class="pull-right">78%</span>
-									<div class="progress progress-striped active progress-right">
-										<div class="bar red" style="width:78%;"></div>
-									</div>
-								</li>
-								<li>软件工程 <span class="pull-right">50%</span>
-									<div class="progress progress-striped active progress-right">
-										<div class="bar blue" style="width:50%;"></div>
-									</div>
-								</li>
-							</ul>
-						</div>
-					</div>
-					<div class="col-md-8 stats-info stats-last widget-shadow">
+
+					<div class="panel-body widget-shadow">
 						<table class="table stats-table table-hover">
 							<thead>
 								<tr>
 									<th>排名</th>
 									<th>学号</th>
 									<th>性别</th>
+									<th>平均分</th>
 									<th>绩点</th>
 								</tr>
 							</thead>
 							<tbody>
-								<tr onclick="window.open('https://www.baidu.com')">
-									<th scope="row">1</th>
-									<td>17100310622</td>
-									<td><span class="label label-success">男</span></td>
-									<td><h5>95.4 <i class="label"></i></h5></td>
+							{% for student in g.score %}
+								<tr style="cursor: pointer;" onclick="#">
+									<th scope="row">{{ loop.index }}</th>
+									<td>{{ student.id }}</td>
+									<td><span class="label label-success">{{ student.gender }}</span></td>
+									<td><h5>{{ student.average| round(2) }} <i class="label"></i></h5></td>
+									<td><h5>{{ student.jidian | round(2) }} <i class="label"></i></h5></td>
 								</tr>
-								<tr>
-									<th scope="row">2</th>
-									<td>17100310654</td>
-									<td><span class="label label-success">男</span></td>
-									<td><h5>94.3 <i class="label"></i></h5></td>
-								</tr>
-								<tr>
-									<th scope="row">3</th>
-									<td>17100315452</td>
-									<td><span class="label label-danger">女</span></td>
-									<td><h5  class="down">89.5 <i class="label"></i></h5></td>
-								</tr>
-								<tr>
-									<th scope="row">4</th>
-									<td>'1710043222</td>
-									<td><span class="label label-success">男</span></td>
-									<td><h5>87.5 <i class="label"></i></h5></td>
-								</tr>
+								{% endfor %}
 							</tbody>
 						</table>
+
 					</div>
 					<div class="clearfix"> </div>
 				</div>
