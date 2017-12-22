@@ -22,9 +22,10 @@ class Score(FlaskForm):
     search = StringField('Search', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
-
-
-
+class CompareForm(FlaskForm):
+    Name1 = StringField('Name1', validators=[DataRequired()])
+    Name2 = StringField('Name2', validators=[DataRequired()])
+    submit = SubmitField('Submit')
 
 
 
