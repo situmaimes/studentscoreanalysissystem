@@ -96,10 +96,11 @@
 							</tbody>
 						</table>
 					</div>
-                    <div class="clearfix"> </div>
-                    <div class="row">
-					 <div class="col stats-info widget-shadow">
-                         {% if student[0] %}
+				</div>
+				<div class="clearfix"> </div>
+				{% if student[0] %}
+				<div class="row">
+					<div class="col stats-info widget-shadow">
                          <label>{{student[0].id}}的优势课程</label>
 						<table class="table stats-table table-hover">
 							<thead>
@@ -125,14 +126,16 @@
 							{% endfor %}
 							</tbody>
 						</table>
-                         {% endif %}
+
 					</div>
 
 			</div>
-                     <div class="clearfix"> </div>
-                    <div class="row">
+				{% endif %}
+				<div class="clearfix"> </div>
+				 {% if student[1] %}
+				<div class="row">
 					 <div class="col stats-info widget-shadow">
-                         {% if student[1] %}
+
                          <label>{{student[1].id}}的优势课程</label>
 						<table class="table stats-table table-hover">
 							<thead>
@@ -158,9 +161,11 @@
 							{% endfor %}
 							</tbody>
 						</table>
-                         {% endif %}
+
 					</div>
- {% endif %}
+				</div>
+				{% endif %}
+ 				{% endif %}
 			</div>
 		</div>
 
@@ -174,19 +179,22 @@
 				<div class="search-box">
 					<form class="input" method="POST">
 {{ form.hidden_tag() }}
- {{ form.Name1(placeholder="键入查询以搜索...",id="input-1") }}
+ {{ form.Name1(placeholder="键入学号",id="input-1") }}
 						<label class="input__label" for="input-1">
 							<svg class="graphic" width="100%" height="100%" viewBox="0 0 404 77" preserveAspectRatio="none">
 								<path d="m0,0l404,0l0,77l-404,0l0,-77z"/>
 							</svg>
 						</label>
-                        {{ form.Name2(placeholder="键入查询以搜索...",id="input-2") }}
+                        {{ form.Name2(placeholder="输入学号",id="input-2") }}
 						<label class="input__label" for="input-2">
 							<svg class="graphic" width="100%" height="100%" viewBox="0 0 404 77" preserveAspectRatio="none">
 								<path d="m0,0l404,0l0,77l-404,0l0,-77z"/>
 							</svg>
 						</label>
-                        {{form.submit()}}
+						<div style="display:none;">
+						{{ form.submit()}}
+						</div>
+
 </form>
 
 				</div><!--//end-search-box-->
