@@ -8,6 +8,40 @@
 				<div class="charts">
 				</div>
 
+				<div class="clearfix"> </div>
+				 {% if g %}
+					<div class="row">
+					 <div class="col stats-info widget-shadow">
+						<table class="table stats-table table-hover">
+							<thead>
+								<tr>
+									<th>名称</th>
+									<th>平均分</th>
+									<th>总课程数</th>
+									<th>优秀课程数</th>
+									<th>不及格课程数</th>
+									<th>优秀比例</th>
+									<th>不及格比例</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th>{{g.search}}</th>\
+									<td><h5>{{g.avg}} <i class="label"></i></h5></td>
+									<td><h5>{{g.nums}} <i class="label"></i></h5></td>
+									<td><h5>{{g.youxiu}} <i class="label"></i></h5></td>
+									<td><h5>{{g.bujige}} <i class="label"></i></h5></td>
+									<td><h5>{{g.youxiulv}} <i class="label"></i></h5></td>
+									<td><h5>{{g.bujigelv}} <i class="label"></i></h5></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+						<div class="clearfix"> </div>
+					</div>
+					<div class="clearfix"> </div>
+				<div class="clearfix"> </div>
+				{% endif %}
 			</div>
 		</div>
 {% endblock %}

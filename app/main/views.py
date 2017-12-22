@@ -7,17 +7,40 @@ from . import forms
 
 
 
-@main.route("/compareStudent",methods=["GET","POST"])
-def compareStudent():
-    return render_template("compareStudent.html", studentNum = main.studentNum, g = g)
+
 
 @main.route("/compareCourse",methods=["GET","POST"])
 def compareCourse():
-    return render_template("compareCourse.html", studentNum = main.studentNum, g = g)
-
-
-
-
+    form=forms.CompareForm()
+    if request.method=="POST":
+        courseName1 = form.Name1.data
+        courseName2 = form.Name2.data
+        courses1 = db.session.query(Score).filter(
+            Score.courseName.like("%"+courseName1+"%")).group_by(Score.termName, Score.classId).all()
+        courses2 = db.session.query(Score).filter(
+            Score.courseName.like("%"+courseName2+"%")).group_by(Score.termName, Score.classId).all()
+        if courses1:
+            for i in courses1:
+                i.studentNums = db.session.query(func.count("*")).filter(Score.courseName == i.courseName,
+                                                                         Score.termName == i.termName,
+                                                                         Score.classId == i.classId).scalar()
+                i.avg = db.session.query(func.avg(Score.mark)).filter(Score.courseName == i.courseName,
+                                                                  Score.termName == i.termName,
+                                                                  Score.classId == i.classId).scalar()
+                i.youxiuStudents = db.session.query(Score).filter(Score.courseName == i.courseName,
+                                                              Score.termName == i.termName, Score.classId == i.classId).order_by(db.desc(Score.mark)).all()[:5]
+        if courses2:
+            for i in courses2:
+                i.studentNums = db.session.query(func.count("*")).filter(Score.courseName == i.courseName,
+                                                                         Score.termName == i.termName,
+                                                                         Score.classId == i.classId).scalar()
+                i.avg = db.session.query(func.avg(Score.mark)).filter(Score.courseName == i.courseName,
+                                                                  Score.termName == i.termName,
+                                                                  Score.classId == i.classId).scalar()
+                i.youxiuStudents = db.session.query(Score).filter(Score.courseName == i.courseName,
+                                                              Score.termName == i.termName, Score.classId == i.classId).order_by(db.desc(Score.mark)).all()[:5]
+        return render_template("compareCourse.html", studentNum=main.studentNum, form=form, courses=[courses1, courses2])
+    return render_template("compareCourse.html", studentNum=main.studentNum, form=form, courses=[])
 
 
 @main.before_app_first_request
@@ -207,3 +230,28 @@ def scoreAnalysis(key,value):
                 i["bujigelv"]=i["bujige"]/len(i["results"])
             i["num"]=len(i["results"])
         return (len(args),zongarg,zongresults,zongyouxiu,zongbujige,zongnums,zongyouxiulv,zongbujigelv,results)
+
+@main.route("/compareStudent",methods=["GET","POST"])
+def compareStudent():
+    form = forms.CompareForm()
+    if form.validate_on_submit():
+        studentId1 = form.Name1.data
+        studentId2 = form.Name2.data
+        student1 = db.session.query(Student).filter(Student.id == studentId1).first()
+        student2 = db.session.query(Student).filter(Student.id == studentId2).first()
+        if student1:
+            student1.courseNums = db.session.query(func.count("*")).filter(Score.studentId == studentId1).scalar()
+            student1.courses = db.session.query(Score).filter(Score.studentId == studentId1).all()
+            student1.youxiuNums=db.session.query(func.count("*")).filter(Score.studentId == studentId1,Score.mark>=90).scalar()
+            student1.bujigeNums=db.session.query(func.count("*")).filter(Score.studentId== studentId1,Score.mark<60).scalar()
+            student1.youxiuCourses = db.session.query(Score).filter(Score.studentId == studentId1).order_by(
+                db.desc(Score.mark)).all()[:5]
+        if student2:
+            student2.courseNums = db.session.query(func.count("*")).filter(Score.studentId == studentId2).scalar()
+            student2.courses = db.session.query(Score).filter(Score.studentId == studentId2).all()
+            student2.youxiuNums=db.session.query(func.count("*")).filter(Score.studentId == studentId2,Score.mark>=90).scalar()
+            student2.bujigeNums=db.session.query(func.count("*")).filter(Score.studentId== studentId2,Score.mark<60).scalar()
+            student2.youxiuCourses = db.session.query(Score).filter(Score.studentId == studentId2).order_by(db.desc(Score.mark)).all()[:5]
+        return render_template("compareStudent.html", studentNum = main.studentNum, form=form,student=[student1,student2])
+    if request.method == "GET":
+        return render_template("compareStudent.html", studentNum=main.studentNum, form=form)
