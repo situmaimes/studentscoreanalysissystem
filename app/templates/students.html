@@ -6,46 +6,104 @@
 					<div class="clearfix"> </div>
 				</div>
 				<div class="charts">
-
 				</div>
+                {% if student %}
+
 				<div class="row">
 					 <div class="col stats-info widget-shadow">
 						<table class="table stats-table table-hover">
 							<thead>
 								<tr>
-									<th>名称</th>
-									<th>课程代码</th>
-									<th>人数</th>
+									<th>学号</th>
+									<th>性别</th>
+									<th>学院</th>
+									<th>专业</th>
+									<th>班级</th>
+									<th>年级</th>
 									<th>平均分</th>
+									<th>绩点</th>
+									<th>优秀率</th>
+									<th>不及格率</th>
 								</tr>
 							</thead>
 							<tbody>
 								<tr>
-									<th scope="row">高等数学</th>
-									<td>17100310622</td>
-									<td><span class="label label-danger">110</span></td>
-									<td><h5>95.4 <i class="label"></i></h5></td>
+									<th>{{student.id}}</th>
+									<td>{{student.gender}}</td>
+									<td>{{student.departmentName}}</td>
+									<td>{{student.majorName}}</td>
+									<td>{{student.className}}</td>
+									<td>{{student.grade}}</td>
+									<td><h5>{{student.average}} <i class="label"></i></h5></td>
+									<td><h5>{{student.jidian}} <i class="label"></i></h5></td>
+									<td><h5>{{student.youxiu}} <i class="label"></i></h5></td>
+									<td><h5>{{student.bujige}} <i class="label"></i></h5></td>
 								</tr>
 							</tbody>
 						</table>
 					</div>
+
+					<div class="clearfix"> </div>
+					</div>
+					<div class="clearfix"> </div>
+				<div class="clearfix"> </div>
+				{% if courses %}
+				<div class="row">
+					 <div class="col stats-info widget-shadow">
+						<table class="table stats-table table-hover">
+							<thead>
+								<tr>
+									<th>课程名称</th>
+									<th>学分</th>
+									<th>学期</th>
+									<th>课程性质</th>
+									<th>分数</th>
+								</tr>
+							</thead>
+							<tbody>
+							{% for i in courses %}
+								<tr>
+									<th>{{i.courseName}}</th>
+									<td>{{i.credit}}</td>
+									<td>{{i.termName}}</td>
+									<td>{{i.courseDe}}</td>
+									<td><h5>{{i.mark}} <i class="label"></i></h5></td>
+								</tr>
+							{% endfor %}
+							</tbody>
+						</table>
+					 </div>
+
 					<div class="clearfix"> </div>
 				</div>
+					{% endif %}
+				{% endif %}
+
+
+
+
+
 				<div class="clearfix"> </div>
 			</div>
 		</div>
 {% endblock %}
+
+
+
+
 {% block search %}
 <!--search-box-->
-				<div class="search-box" method="get">
-					<form class="input">
-						<input class="sb-search-input input__field--madoka" placeholder="键入学号查询以搜索..." type="search" id="input-31" name="search"/>
+				<div class="search-box">
+					<form class="input" method="post">
+{{ form.hidden_tag() }}
+ {{ form.studentId(class="sb-search-input input__field--madoka",placeholder="键入学号查询以搜索...",id="input-31") }}
 						<label class="input__label" for="input-31">
 							<svg class="graphic" width="100%" height="100%" viewBox="0 0 404 77" preserveAspectRatio="none">
 								<path d="m0,0l404,0l0,77l-404,0l0,-77z"/>
 							</svg>
 						</label>
-					</form>
+</form>
+
 				</div><!--//end-search-box-->
 			<div class="clearfix"> </div>
 {% endblock %}
