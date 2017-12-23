@@ -8,7 +8,6 @@
 				<div class="charts">
 				</div>
 
-				<div class="clearfix"> </div>
 				 {% if g.avg %}
 					<div class="row">
 					 <div class="col stats-info widget-shadow">
@@ -26,7 +25,7 @@
 							</thead>
 							<tbody>
 								<tr>
-									<th>{{g.search}}</th>\
+									<th>{{g.search}}</th>
 									<td><h5>{{g.avg |round(2) }} <i class="label"></i></h5></td>
 									<td><h5>{{g.nums|round(2)}} <i class="label"></i></h5></td>
 									<td><h5>{{g.youxiu|round(2)}} <i class="label"></i></h5></td>
@@ -58,7 +57,7 @@
 							</thead>
 							<tbody>
 								<tr>
-									<th>{{other["name"]}}</th>\
+									<th>{{other["name"]}}</th>
 									<td><h5>{% if other["avg"] %}{{other["avg"]|round(2) }} {% endif %}<i class="label"></i></h5></td>
 									<td><h5>{{other["num"]|round(2)}} <i class="label"></i></h5></td>
 									<td><h5>{{other["youxiu"]|round(2)}} <i class="label"></i></h5></td>

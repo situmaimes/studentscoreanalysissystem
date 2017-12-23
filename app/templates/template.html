@@ -51,7 +51,7 @@
 									<a href="{{ url_for('.student') }}">基本信息查询</a>
 								</li>
 								<li>
-									<a href="{{ url_for('.totalRank') }}">总排名</a>
+									<a href="{{ url_for('.totalRank') }}">你的排名</a>
 								</li>
 
 								<li>
@@ -86,6 +86,24 @@
 								</li>
 								<li>
 									<a href="{{ url_for('.compareCourse') }}">课程对比</a>
+								</li>
+							</ul>
+							<!-- /nav-second-level -->
+						</li>
+						<li>
+							<a href="#"><i class="fa fa-home nav_icon"></i>决策分析 <span class="fa arrow"></span></a>
+							<ul class="nav nav-second-level collapse">
+								<li>
+									<a href="{{ url_for('.analyseStudent') }}">学生</a>
+								</li>
+								<li>
+									<a href="{{ url_for('.analyseClass') }}">班级</a>
+								</li>
+								<li>
+									<a href="{{ url_for('.analyseMajor') }}">专业</a>
+								</li>
+								<li>
+									<a href="{{ url_for('.analyseCourse') }}">课程</a>
 								</li>
 							</ul>
 							<!-- /nav-second-level -->
