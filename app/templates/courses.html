@@ -1,12 +1,8 @@
 {% extends "template.html" %}
+{% block er %}
+{{super()}}
+{% endblock %}
 {% block main %}
-<div id="page-wrapper">
-			<div class="main-page">
-				<div class="row-one">
-					<div class="clearfix"> </div>
-				</div>
-				<div class="charts">
-				</div>
                 {% if courses %}
 				<div class="row">
 					 <div class="col stats-info widget-shadow">
@@ -77,16 +73,6 @@
 				{% endif %}
 				<div class="clearfix"> </div>
 				{% endif %}
-				</div>
-
-
-
-
-
-
-
-			</div>
-
 {% endblock %}
 
 

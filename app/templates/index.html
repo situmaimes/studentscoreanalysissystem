@@ -1,8 +1,5 @@
 {% extends "template.html" %}
 {% block main %}
-		<div id="page-wrapper">
-			<div class="main-page">
-				<div class="row-one">
 
 					<div class="col-md-4 widget">
 						<div class="stats-left">
@@ -35,8 +32,9 @@
 						<div class="clearfix"> </div>
 					</div>
 					<div class="clearfix"> </div>
-				</div>
+
 				<div class="charts">
+
 					<!--专业分布-->
 					<div class="col-md-6 charts-grids widget">
 						<h4 class="title">性别比例</h4>
@@ -78,10 +76,8 @@
 							new Chart(document.getElementById("pie").getContext("2d")).Pie(pieData);
 
 							</script>
-
 				</div>
 				<div class="row">
-
 					<div class="panel-body widget-shadow">
 						<table class="table stats-table table-hover">
 							<thead>
@@ -110,6 +106,4 @@
 					<div class="clearfix"> </div>
 				</div>
 				<div class="clearfix"> </div>
-			</div>
-		</div>
 {% endblock %}

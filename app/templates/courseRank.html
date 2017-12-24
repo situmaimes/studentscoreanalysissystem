@@ -1,0 +1,43 @@
+{% extends "template.html" %}
+{% block main %}
+				<h3 class="title1">总排名（按平均分从高到低）</h3>
+				<div class="tables">
+
+					<div class="panel-body widget-shadow">
+						<table class="table stats-table table-hover">
+							<thead>
+								<tr>
+									<th>排名</th>
+									<th>课程名称</th>
+                                    <th>教学班</th>
+                                    <th>选班人数</th>
+									<th>学期名称</th>
+									<th>学分</th>
+                                    <th>课程性质</th>
+                                    <th>平均分</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for course in courses %}
+								<tr style="cursor: pointer;">
+									<th scope="row">{{ loop.index }}</th>
+									<td>{{ course.courseName }}</td>
+                                    <td>{{ course.classId }}</td>
+                                    <td>{{ course.nums }}</td>
+                                    <td>{{ course.termName }}</td>
+                                    <td><h5>{{ course.credit }} <i class="label"></i></h5></td>
+                                    <td>{{ course.courseDe }}</td>
+									<td><h5>{{ course.avg | round(2)}} <i class="label"></i></h5></td>
+								</tr>
+								{% endfor %}
+								<script>
+
+								</script>
+							</tbody>
+						</table>
+					</div>
+					<div class="clearfix"> </div>
+				</div>
+				<div class="clearfix"> </div>
+				<div class="clearfix"> </div>
+{% endblock %}

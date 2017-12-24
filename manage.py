@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 import os
-from app import create_app,db
-from app.models import Student,Score
-from prepare import processDB
 from flask_script import Manager, Shell
+from app import create_app, db
+from app.models import Student, Score
+from app.prepare import processDB
 
 app=create_app("testing")
 
-if not os.path.exists(app.config["SQLALCHEMY_DATABASE_URI"].lstrip("sqlite:///")):
+if not os.path.exists("/"+app.config["SQLALCHEMY_DATABASE_URI"].lstrip("sqlite:///")):
     appContext = app.app_context()
     appContext.push()
     processDB()

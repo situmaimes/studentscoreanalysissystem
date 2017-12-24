@@ -1,5 +1,5 @@
-from app.models import Student,Score
-from app import db
+from .models import Student,Score
+from . import db
 import xlrd
 fileName="StudentAndScore.xls"
 def processDB():

@@ -55,7 +55,7 @@
 								</li>
 
 								<li>
-									<a href="{{ url_for('.specializedRank') }}">专业排名</a>
+									<a href="{{ url_for('.majorRank') }}">专业排名</a>
 								</li>
 							</ul>
 							<!-- /nav-second-level -->
@@ -91,7 +91,7 @@
 							<!-- /nav-second-level -->
 						</li>
 						<li>
-							<a href="#"><i class="fa fa-home nav_icon"></i>决策分析 <span class="fa arrow"></span></a>
+							<a href="#"><i class="fa fa-home nav_icon"></i>学期分析 <span class="fa arrow"></span></a>
 							<ul class="nav nav-second-level collapse">
 								<li>
 									<a href="{{ url_for('.analyseStudent') }}">学生</a>
@@ -154,8 +154,21 @@
 		</div>
 		<!-- //header-ends -->
 		<!-- main content start-->
+		<div id="page-wrapper">
+			<div class="main-page">
+				<div class="row-one">
+					<div class="clearfix"> </div>
+				</div>
+
+				{% block er %}
+		{% if error %}
+		<h4 class="row">查询失败</h4>
+		{% endif %}
+				{% endblock %}
 		{% block main %}
 		{% endblock %}
+			</div>
+		</div>
 		<!--footer-->
 		<div class="footer">
 		   <p>Copyright &copy; 2017 Company All rights reserved.</p>

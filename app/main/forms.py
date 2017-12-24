@@ -6,6 +6,9 @@ from wtforms.validators import DataRequired
 class StudentForm(FlaskForm):
     studentId = StringField('StudentId', validators=[DataRequired()])
     submit = SubmitField('Submit')
+class NormalForm(FlaskForm):
+    string = StringField('String', validators=[DataRequired()])
+    submit = SubmitField('Submit')
 class CourseForm(FlaskForm):
     courseName = StringField('CourseName', validators=[DataRequired()])
     submit = SubmitField('Submit')
