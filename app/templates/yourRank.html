@@ -11,9 +11,33 @@
 								<tr>
 									<th>学号</th>
 									<th>性别</th>
+									<th>班级</th>
 									<th>专业</th>
 									<th>平均分</th>
 									<th>绩点</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>{{ student.id }}</td>
+									<td><span class="label label-success">{{ student.gender }}</span></td>
+									<td>{{ student.className }}</td>
+									<td>{{ student.majorName }}</td>
+									<td><h5>{{ student.average| round(2) }} <i class="label"></i></h5></td>
+									<td><h5>{{ student.jidian | round(2) }} <i class="label"></i></h5></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+					<div class="clearfix"> </div>
+					</div>
+				<div class="row">
+					 <div class="col stats-info widget-shadow">
+						<table class="table stats-table table-hover">
+							<thead>
+								<tr>
+									<th>学号</th>
 									<th>专业平均分排名</th>
 									<th>专业绩点排名</th>
 									<th>班级平均分排名</th>
@@ -23,10 +47,6 @@
 							<tbody>
 								<tr>
 									<td>{{ student.id }}</td>
-									<td><span class="label label-success">{{ student.gender }}</span></td>
-									<td>{{ student.majorName }}</td>
-									<td><h5>{{ student.average| round(2) }} <i class="label"></i></h5></td>
-									<td><h5>{{ student.jidian | round(2) }} <i class="label"></i></h5></td>
 									<td><h5>{{ student.avgMajorRank}} <i class="label"></i></h5></td>
 									<td><h5>{{ student.gpaMajorRank}} <i class="label"></i></h5></td>
 									<td><h5>{{ student.avgClassRank}} <i class="label"></i></h5></td>

@@ -1,4 +1,4 @@
-from flask import render_template,g,session,redirect,url_for,request
+from flask import render_template,g,request
 from . import main
 from .. import db
 from ..models import Student,Score
@@ -140,7 +140,7 @@ def course():
                 students=db.session.query(Score).filter(Score.courseName.in_(names)).order_by(db.desc(Score.mark)).all()[:20]
         else:
             students=[]
-        return render_template('courses.html', studentNum=main.studentNum, form=form, courses=courses,students=students)
+        return render_template('courses.html', studentNum=main.studentNum, form=form, courses=courses,students=students,courseName=courseName)
     if request.method == "GET":
         return render_template("courses.html", studentNum=main.studentNum, form=form)
 

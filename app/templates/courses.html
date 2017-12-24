@@ -41,15 +41,15 @@
 				<div class="row">
 					 <div class="col stats-info widget-shadow">
 						<table class="table stats-table table-hover">
+							<h4 class="row">{{courseName}}的优秀学生</h4>
 							<thead>
 								<tr>
 									<th>学号</th>
 									<th>课程名称</th>
-									<th>教学班</th>
 									<th>学期名称</th>
 									<th>学分</th>
 									<th>课程性质</th>
-									<th>成绩分</th>
+									<th>成绩</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -57,7 +57,6 @@
 								<tr>
 									<th>{{student.studentId}}</th>
 									<td>{{student.courseName}}</td>
-									<td>{{student.classId}}</td>
 									<td>{{student.termName}}</td>
 									<td><h5>{{student.credit}}<i class="label"></i></h5></td>
 									<td>{{student.courseDe}}</td>

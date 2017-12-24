@@ -28,9 +28,9 @@
 
 						};
 						{% for class in term["class"] %}
-						barChartData.labels.push('{{class.className}}'.substring(0, 4));
+						barChartData.labels.push('{{class.className}}');
 						{% endfor %}
-						barChartData.labels.push('{{majorName}}总'.substring(0, 4));
+						barChartData.labels.push('{{majorName}}总');
 						{% for class in term["class"] %}
 						barChartData.datasets[0].data.push('{{class.avg}}');
 						{% endfor %}
@@ -42,7 +42,7 @@
 				<div class="row">
 					 <div class="col stats-info widget-shadow">
 						<table class="table stats-table table-hover">
-							<h4 class="title">{{majorName}}{{term["termName"]}}的优秀学生</h4>
+							<h4 class="row">{{majorName}}{{term["termName"]}}的优秀学生</h4>
 							<thead>
 								<tr>
 									<th>排名</th>
@@ -70,7 +70,7 @@
 				<div class="row">
 					 <div class="col stats-info widget-shadow">
 						<table class="table stats-table table-hover">
-							<h4 class="title">{{majorName}}{{term["termName"]}}的各科平均分</h4>
+							<h4 class="row">{{majorName}}{{term["termName"]}}的各科平均分</h4>
 							<thead>
 								<tr>
 									<th>课程名称</th>
