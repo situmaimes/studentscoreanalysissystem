@@ -1,0 +1,147 @@
+{% extends "template.html" %}
+{% block er %}
+{{super()}}
+{% endblock %}
+{% block main %}
+
+                {% if results %}
+                {% for term in results %}
+                <div class="row">
+					<div class="charts panel-body widget-shadow">
+						<h4 class="title">{{cls.className}}的{{term["termName"]}}各科平均分与总平均分比较</h4>
+						<canvas id="{{term['termName']}}"  height="3000" width="8000" style="width: 8000px; height: 3000px;"></canvas>
+					</div>
+					<script>
+						var getRandomColor = function() {
+						  return (function(m,s,c){
+						    return (c ? arguments.callee(m,s,c-1) : '#') +
+						      s[m.floor(m.random() * 16)]
+						  })(Math,'0123456789abcdef',5)
+						}
+						var barChartData = {
+							labels : [],
+							datasets : [
+								{
+									fillColor : getRandomColor(),
+									strokeColor : "#ef553a",
+									highlightFill: "#ef553a",
+									data : []
+								},
+								{
+									fillColor : getRandomColor(),
+									strokeColor : "#ef553a",
+									highlightFill: "#ef553a",
+									data : []
+								}
+							]
+
+						};
+						{% for course in term["classAvg"] %}
+						barChartData.labels.push('{{course.courseName}}'.substring(0, 4));
+						{% endfor %}
+						{% for course in term["classAvg"] %}
+						barChartData.datasets[0].data.push('{{course.avg}}');
+						{% endfor %}
+						{% for course in term["average"] %}
+						barChartData.datasets[1].data.push('{{course}}');
+						{% endfor %}
+						new Chart(document.getElementById("{{term['termName']}}").getContext("2d")).Bar(barChartData);
+					</script>
+				</div>
+				<!--<div class="row">
+					 <div class="col stats-info widget-shadow">
+						<table class="table stats-table table-hover">
+							<thead>
+								<tr>
+									<th>班级名称</th>
+									<th>课程名称</th>
+									<th>学期名称</th>
+									<th>学分数</th>
+									<th>课程性质</th>
+									<th>平均分</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th></th>
+									<td></td>
+									<td><h5><i class="label"></i></h5></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+                </div>
+                -->
+                <div class="row">
+					 <div class="col stats-info widget-shadow">
+						<table class="table stats-table table-hover">
+                            <h4 class="title">{{cls.className}}的{{term["termName"]}}优秀学生</h4>
+							<thead>
+								<tr>
+                                    <th>排名</th>
+									<th>学号</th>
+									<th>性别</th>
+									<th>平均分</th>
+								</tr>
+							</thead>
+							<tbody>
+                            {% for student in term["topStu"] %}
+											<tr style="cursor: pointer;">
+												<th scope="row">{{ loop.index }}</th>
+												<td>{{ student.id }}</td>
+												<td><span class="label label-success">{{ student.gender }}</span></td>
+												<td><h5>{{ student.avg|round(2) }}<i class="label"></i></h5></td>
+											</tr>
+											{% endfor %}
+							</tbody>
+						</table>
+					</div>
+                </div>
+                {% endfor %}
+<div class="row">
+					 <div class="col stats-info widget-shadow">
+						<table class="table stats-table table-hover">
+							<thead>
+								<tr>
+									<th>班级</th>
+									<th>学期</th>
+									<th>平均分</th>
+									<th>班级排名</th>
+								</tr>
+							</thead>
+							<tbody>
+                            {% for term in results %}
+								<tr>
+									<th>{{cls.className}}</th>
+									<td>{{term["termName"]}}</td>
+									<td><h5>{{term["classavg"]| round(2)}}<i class="label"></i></h5></td>
+                                    <td><h5>{{term["majorRank"]}}<i class="label"></i></h5></td>
+								</tr>
+                            {% endfor %}
+							</tbody>
+						</table>
+					</div>
+					<div class="clearfix"> </div>
+					</div>
+				{% endif %}
+{% endblock %}
+
+
+
+
+{% block search %}
+<!--search-box-->
+				<div class="search-box">
+					<form class="input" method="post">
+{{ form.hidden_tag() }}
+ {{ form.string(class="sb-search-input input__field--madoka",placeholder="键入班级名称查询",id="input-31") }}
+						<label class="input__label" for="input-31">
+							<svg class="graphic" width="100%" height="100%" viewBox="0 0 404 77" preserveAspectRatio="none">
+								<path d="m0,0l404,0l0,77l-404,0l0,-77z"/>
+							</svg>
+						</label>
+</form>
+
+				</div><!--//end-search-box-->
+			<div class="clearfix"> </div>
+{% endblock %}

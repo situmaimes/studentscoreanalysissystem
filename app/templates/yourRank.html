@@ -1,14 +1,9 @@
 {% extends "template.html" %}
+{% block er %}
+{{super()}}
+{% endblock %}
 {% block main %}
-<div id="page-wrapper">
-			<div class="main-page">
-				<div class="row-one">
-					<div class="clearfix"> </div>
-				</div>
-				<div class="charts">
-				</div>
                 {% if student %}
-
 				<div class="row">
 					 <div class="col stats-info widget-shadow">
 						<table class="table stats-table table-hover">
@@ -19,8 +14,10 @@
 									<th>专业</th>
 									<th>平均分</th>
 									<th>绩点</th>
-									<th>平均分排名</th>
-									<th>绩点排名</th>
+									<th>专业平均分排名</th>
+									<th>专业绩点排名</th>
+									<th>班级平均分排名</th>
+									<th>班级绩点排名</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -30,8 +27,10 @@
 									<td>{{ student.majorName }}</td>
 									<td><h5>{{ student.average| round(2) }} <i class="label"></i></h5></td>
 									<td><h5>{{ student.jidian | round(2) }} <i class="label"></i></h5></td>
-									<td><h5>{{ student.avgRank}} <i class="label"></i></h5></td>
-									<td><h5>{{ student.gpaRank}} <i class="label"></i></h5></td>
+									<td><h5>{{ student.avgMajorRank}} <i class="label"></i></h5></td>
+									<td><h5>{{ student.gpaMajorRank}} <i class="label"></i></h5></td>
+									<td><h5>{{ student.avgClassRank}} <i class="label"></i></h5></td>
+									<td><h5>{{ student.gpaClassRank}} <i class="label"></i></h5></td>
 								</tr>
 							</tbody>
 						</table>
@@ -39,11 +38,7 @@
 
 					<div class="clearfix"> </div>
 					</div>
-
 				{% endif %}
-
-			</div>
-		</div>
 {% endblock %}
 
 

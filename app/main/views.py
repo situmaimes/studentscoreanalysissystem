@@ -3,7 +3,29 @@ from . import main
 from .. import db
 from ..models import Student,Score
 from sqlalchemy import func
+from sqlalchemy import distinct
 from . import forms
+
+
+@main.route("/analyseCourse",methods=["GET","POST"])
+def analyseCourse():
+    form = forms.NormalForm()
+    if form.validate_on_submit():
+        courseName=db.session.query(Score.courseName).filter(Score.courseName.like("%"+form.string.data+"%")).first()
+        if courseName==None:
+            return render_template("analyseCourse.html", studentNum=main.studentNum, form=form,error=True)
+        else:
+            courseName=courseName.courseName
+        terms=db.session.query(distinct(Score.termName)).filter(Score.courseName==courseName).all()
+        results=[]
+        for i in terms:
+            results.append({"termName":i[0],
+                            "avg":db.session.query(Score,func.avg(Score.mark).label("avg")).filter(Score.termName==i[0],Score.courseName==courseName).first(),
+                            "topStu":db.session.query(Score.mark,Student).filter(Score.studentId==Student.id,
+                                        Score.termName==i[0],Score.courseName==courseName).order_by(db.desc(Score.mark)).all()[:10]})
+        return render_template('analyseCourse.html', studentNum=main.studentNum,form=form,results=results,courseName=courseName)
+    if request.method=="GET":
+        return render_template("analyseCourse.html", studentNum=main.studentNum, form=form)
 
 
 @main.route("/analyseStudent",methods=["GET","POST"])
@@ -12,16 +34,22 @@ def analyseStudent():
     if form.validate_on_submit():
         studentId=form.studentId.data
         terms=db.session.query(Score.termName).filter(Score.studentId == studentId).group_by(Score.termName).all()
+        if terms==[]:
+            return render_template("analyseStudent.html", studentNum=main.studentNum, form=form,error=True)
         results=[]
-        majorname=db.session.query(Student.majorName).filter(Student.id == studentId).first().majorName
+        student=db.session.query(Student).filter(Student.id == studentId).first()
         for i in terms:
             results.append({
                 "termName":i.termName,"score":db.session.query(Score).filter(Score.studentId==studentId,Score.termName==i.termName).all(),
                             "avg":db.session.query(func.avg(Score.mark)).filter(Score.studentId==studentId,Score.termName==i.termName).scalar()})
         for i in results:
             i["average"]=[]
-            avg=db.session.query(Score.studentId,func.avg(Score.mark).label("avg")).filter(Student.id==Score.studentId,Student.majorName==majorname,Score.termName==i["termName"]).group_by(Score.studentId).all()
-            i["rank"]=len([j for j in avg if j.avg>i["avg"]])+1
+            avg=db.session.query(Score.studentId,Student.majorName,func.avg(Score.mark).label("avg")).filter(Student.id==Score.studentId,
+                                Student.majorName==student.majorName,Score.termName==i["termName"]).group_by(Score.studentId).all()
+            i["majorRank"]=len([j for j in avg if j.avg>i["avg"]])+1
+            avg=db.session.query(Score.studentId,Student.className,func.avg(Score.mark).label("avg")).filter(Student.id==Score.studentId,
+                                Student.className==student.className,Score.termName==i["termName"]).group_by(Score.studentId).all()
+            i["classRank"] = len([j for j in avg if j.avg > i["avg"]]) + 1
             for course in i["score"]:
                 courseName=course.courseName
                 i["average"].append(db.session.query(func.avg(Score.mark).label("avg")).filter(Score.courseName==courseName,Score.termName==i["termName"]).scalar())
@@ -29,103 +57,55 @@ def analyseStudent():
         return render_template('analyseStudent.html', studentNum=main.studentNum,form=form,results=results,studentId=studentId)
     if request.method=="GET":
         return render_template("analyseStudent.html", studentNum=main.studentNum,form=form)
+
 @main.route("/analyseClass",methods=["GET","POST"])
 def analyseClass():
-    form = forms.StudentForm()
+    form = forms.NormalForm()
     if form.validate_on_submit():
-        studentId=form.studentId.data
-        terms=db.session.query(Score.termName).filter(Score.studentId == studentId).group_by(Score.termName).all()
-        results=[]
-        for i in terms:
-            results.append({"termName":i.termName,"score":db.session.query(Score).filter(Score.studentId==studentId).all(),
-                            "avg":db.session.query(func.avg(Score.mark)).filter(Score.studentId==studentId,termName==i.termName).scalar()})
-        for i in results:
-            termName=i["termName"]
-            i["average"]=[]
-            for course in i["score"]:
-                courseName=course.courseName
-                i["average"]=db.session.query(func.avg(Score.mark)).filter(Score.courseName==courseName,Score.termName==termName).scalar()
-        return render_template('students.html', studentNum=main.studentNum,form=form,student=student,courses=courses)
-    if request.method=="GET":
-        return render_template("students.html", studentNum=main.studentNum,form=form)
-@main.route("/analyseMajor",methods=["GET","POST"])
-def analyseMajor():
-    form = forms.StudentForm()
-    if form.validate_on_submit():
-        studentId=form.studentId.data
-        terms=db.session.query(Score.termName).filter(Score.studentId == studentId).group_by(Score.termName).all()
-        results=[]
-        for i in terms:
-            results.append({"termName":i.termName,"score":db.session.query(Score).filter(Score.studentId==studentId).all(),
-                            "avg":db.session.query(func.avg(Score.mark)).filter(Score.studentId==studentId,termName==i.termName).scalar()})
-        for i in results:
-            termName=i["termName"]
-            i["average"]=[]
-            for course in i["score"]:
-                courseName=course.courseName
-                i["average"]=db.session.query(func.avg(Score.mark)).filter(Score.courseName==courseName,Score.termName==termName).scalar()
-        return render_template('students.html', studentNum=main.studentNum,form=form,student=student,courses=courses)
-    if request.method=="GET":
-        return render_template("students.html", studentNum=main.studentNum,form=form)
-@main.route("/analyseCourse",methods=["GET","POST"])
-def analyseCourse():
-    form = forms.StudentForm()
-    if form.validate_on_submit():
-        studentId=form.studentId.data
-        terms=db.session.query(Score.termName).filter(Score.studentId == studentId).group_by(Score.termName).all()
-        results=[]
-        for i in terms:
-            results.append({"termName":i.termName,"score":db.session.query(Score).filter(Score.studentId==studentId).all(),
-                            "avg":db.session.query(func.avg(Score.mark)).filter(Score.studentId==studentId,termName==i.termName).scalar()})
-        for i in results:
-            termName=i["termName"]
-            i["average"]=[]
-            for course in i["score"]:
-                courseName=course.courseName
-                i["average"]=db.session.query(func.avg(Score.mark)).filter(Score.courseName==courseName,Score.termName==termName).scalar()
-        return render_template('students.html', studentNum=main.studentNum,form=form,student=student,courses=courses)
-    if request.method=="GET":
-        return render_template("students.html", studentNum=main.studentNum,form=form)
+        cls = db.session.query(Student.className,Student.majorName).filter(
+            Student.className.like("%" + form.string.data + "%")).first()
+        if cls==None:
+            return render_template('analyseClass.html', studentNum=main.studentNum, form=form,error=True)
 
-
-@main.route("/compareCourse",methods=["GET","POST"])
-def compareCourse():
-    form=forms.CompareForm()
-    if request.method=="POST":
-        courseName1 = form.Name1.data
-        courseName2 = form.Name2.data
-        courses1 = db.session.query(Score).filter(
-            Score.courseName.like("%"+courseName1+"%")).group_by(Score.termName, Score.classId).all()
-        courses2 = db.session.query(Score).filter(
-            Score.courseName.like("%"+courseName2+"%")).group_by(Score.termName, Score.classId).all()
-        if courses1:
-            for i in courses1:
-                i.studentNums = db.session.query(func.count("*")).filter(Score.courseName == i.courseName,
-                                                                         Score.termName == i.termName,
-                                                                         Score.classId == i.classId).scalar()
-                i.avg = db.session.query(func.avg(Score.mark)).filter(Score.courseName == i.courseName,
-                                                                  Score.termName == i.termName,
-                                                                  Score.classId == i.classId).scalar()
-                i.youxiuStudents = db.session.query(Score).filter(Score.courseName == i.courseName,
-                                                              Score.termName == i.termName, Score.classId == i.classId).order_by(db.desc(Score.mark)).all()[:5]
-        if courses2:
-            for i in courses2:
-                i.studentNums = db.session.query(func.count("*")).filter(Score.courseName == i.courseName,
-                                                                         Score.termName == i.termName,
-                                                                         Score.classId == i.classId).scalar()
-                i.avg = db.session.query(func.avg(Score.mark)).filter(Score.courseName == i.courseName,
-                                                                  Score.termName == i.termName,
-                                                                  Score.classId == i.classId).scalar()
-                i.youxiuStudents = db.session.query(Score).filter(Score.courseName == i.courseName,
-                                                              Score.termName == i.termName, Score.classId == i.classId).order_by(db.desc(Score.mark)).all()[:5]
-        return render_template("compareCourse.html", studentNum=main.studentNum, form=form, courses=[courses1, courses2])
-    return render_template("compareCourse.html", studentNum=main.studentNum, form=form, courses=[])
-
+        terms = db.session.query(Score.termName).filter(Score.studentId == Student.id,Student.className==cls.className).group_by(Score.termName).all()
+        results = []
+        for i in terms:
+            results.append({
+                "termName": i.termName,
+                "classAvg": db.session.query(Score.courseName,func.avg(Score.mark).label("avg")).filter(
+                    Score.studentId == Student.id,Score.termName == i.termName,
+                    Student.className==cls.className).group_by(Score.courseName).all(),
+                "classavg": db.session.query(func.avg(Score.mark)).filter(Score.studentId == Student.id,
+                    Student.className==cls.className,Score.termName == i.termName).scalar(),
+                "stuNums":db.session.query(func.count(distinct(Student.id))).filter(
+                    Score.studentId == Student.id,Student.className==cls.className,
+                    Score.termName == i.termName).scalar(),
+                "topStu": db.session.query(Student.id,Student.gender,func.avg(Score.mark).label("avg")).filter(
+                    Score.studentId == Student.id,Student.className==cls.className,
+                    Score.termName == i.termName).group_by(Student.id).order_by(db.desc("avg")).all()[:5],
+                "lowStu": db.session.query(Student.id,Student.gender,func.avg(Score.mark).label("avg")).filter(
+                    Score.studentId == Student.id, Score.termName==i.termName,Student.className == cls.className).group_by(Student.id).order_by(
+                    "avg").all()[:5]
+            }
+            )
+        for i in results:
+            i["average"] = []
+            avg = db.session.query(Student.className, func.avg(Score.mark).label("avg")).filter(
+                Student.id == Score.studentId,
+                Student.majorName == cls.majorName, Score.termName == i["termName"]).group_by(Student.className).all()
+            i["majorRank"] = len([j for j in avg if j.avg > i["classavg"]]) + 1
+            for course in i["classAvg"]:
+                i["average"].append(
+                    db.session.query(func.avg(Score.mark).label("avg")).filter(Score.courseName == course.courseName,
+                                                                               Score.termName == i["termName"]
+                                                                               ).scalar())
+        return render_template('analyseClass.html', studentNum=main.studentNum,form=form,results=results,cls=cls)
+    if request.method=="GET":
+        return render_template("analyseClass.html", studentNum=main.studentNum,form=form)
 
 @main.before_app_first_request
 def bf_first_request():
     main.studentNum = db.session.query(func.count(Student.id)).scalar()
-
 
 @main.route("/student",methods=["GET","POST"])
 def student():
@@ -133,6 +113,8 @@ def student():
     if form.validate_on_submit():
         studentId=form.studentId.data
         student=db.session.query(Student).filter(Student.id == studentId).first()
+        if student==None:
+            return render_template('students.html', studentNum=main.studentNum, form=form, error=True)
         courses=db.session.query(Score).filter(Score.studentId==studentId).order_by(db.desc(Score.mark)).all()
         return render_template('students.html', studentNum=main.studentNum,form=form,student=student,courses=courses)
     if request.method=="GET":
@@ -142,7 +124,12 @@ def student():
 def course():
     form = forms.CourseForm()
     if form.validate_on_submit():
-        courseName = form.courseName.data
+        courseName = db.session.query(Score.courseName).filter(
+            Score.courseName.like("%" + form.courseName.data + "%")).first()
+        if courseName == None:
+            return render_template("courses.html", studentNum=main.studentNum, form=form, error=True)
+        else:
+            courseName = courseName.courseName
         courses = db.session.query(Score.courseName,Score.courseId,func.count(Score.studentId).label("nums"),
                                    Score.credit,Score.termName,Score.courseDe,func.avg(Score.mark).label('avg')).filter(Score.courseName.like("%"+courseName+"%"))\
                                 .group_by(Score.termName,Score.courseName).all()
@@ -153,9 +140,9 @@ def course():
                 students=db.session.query(Score).filter(Score.courseName.in_(names)).order_by(db.desc(Score.mark)).all()[:20]
         else:
             students=[]
-        return render_template('lessons.html', studentNum=main.studentNum, form=form, courses=courses,students=students)
+        return render_template('courses.html', studentNum=main.studentNum, form=form, courses=courses,students=students)
     if request.method == "GET":
-        return render_template("lessons.html", studentNum=main.studentNum, form=form)
+        return render_template("courses.html", studentNum=main.studentNum, form=form)
 
 @main.route("/courseRank",methods=["GET","POST"])
 def courseRank():
@@ -184,29 +171,19 @@ def specializedRank():
     g.specializedScore = specializedScore
     return render_template("specializedRank.html", studentNum = main.studentNum, g = g)
 
-def queryAvgTwo(key):
-    studentid = "17110250102"
-    result = db.session.query(Student.id, Student.gender, Student.departmentName, Student.majorName, Student.className,
-                              Student.grade, Student.jidian, Student.average).filter(Student.id == studentid).first()
-    jidianPM = db.session.query(result[0], func.count("*")).filter(Student.jidian >= result[6]).first()
-    averagePM = db.session.query(result[0], func.count("*")).filter(Student.average >= result[7]).first()
-    print(jidianPM, averagePM)
-    queryAvgTwo("性别")
-    result=db.session.query(Score.courseId,Score.courseName,func.avg(Score.mark).label("average")).group_by(Score.courseId).order_by(db.desc("average")).all()
-    jidianPM=db.session.query(result[0],func.count("*")).filter(Student.jidian>=result[6]).first()
-    averagePM=db.session.query(result[0],func.count("*")).filter(Student.average>=result[7]).first()
-    print(jidianPM,averagePM)
-    queryAvgTwo("性别")
-    keyDict={
-        "性别":Student.gender,
-        "学院":Student.departmentName,
-        "专业":Student.majorName,
-        "班级":Student.className,
-        "年级":Student.grade
-    }
-    result=db.session.query(keyDict[key],func.avg(Student.average)).filter(Student.id == Score.studentId).group_by(keyDict[key]).all()
-    print(result)
-
+@main.route("/majorRank",methods=["GET","POST"])
+def majorRank():
+    form = forms.NormalForm()
+    if form.validate_on_submit():
+        majorName = form.string.data
+        result=db.session.query(Student).filter(Student.majorName.like("%"+majorName+"%")).order_by(db.desc(Student.average)).all()[:50]
+        if result==[]:
+            error=True
+        else:
+            error=False
+        return render_template('majorRank.html', studentNum=main.studentNum, form=form, result=result,error=error)
+    if request.method == "GET":
+        return render_template("majorRank.html", studentNum=main.studentNum, form=form)
 
 @main.route("/totalRank",methods=["GET","POST"])
 def totalRank():
@@ -214,17 +191,24 @@ def totalRank():
     if form.validate_on_submit():
         studentId = form.studentId.data
         student = db.session.query(Student).filter(Student.id == studentId).first()
-        student.avg=db.session.query(Student).filter(Student.average >student.average,Student.majorName==student.majorName).all()
-        student.gpa=db.session.query(Student).filter(Student.jidian >student.jidian,Student.majorName==student.majorName).all()
-        student.avgRank=len(student.avg)+1
-        student.gpaRank=len(student.gpa)+1
+        if student==None:
+            return render_template("yourRank.html", studentNum=main.studentNum, form=form,error=True)
+        student.avgMajor=db.session.query(Student).filter(Student.average > student.average,Student.majorName==student.majorName).all()
+        student.gpaMajor=db.session.query(Student).filter(Student.jidian > student.jidian,Student.majorName==student.majorName).all()
+        student.avgMajorRank = len(student.avgMajor) + 1
+        student.gpaMajorRank = len(student.gpaMajor) + 1
+        student.avgClass= db.session.query(Student).filter(Student.average > student.average,
+                                                            Student.className == student.className).all()
+        student.gpaClass = db.session.query(Student).filter(Student.jidian > student.jidian,
+                                                            Student.className == student.className).all()
+        student.avgClassRank = len(student.avgClass) + 1
+        student.gpaClassRank = len(student.gpaClass) + 1
         return render_template('yourRank.html', studentNum=main.studentNum, form=form, student=student)
     if request.method == "GET":
         return render_template("yourRank.html", studentNum=main.studentNum, form=form)
 
 @main.route("/")
 def index():
-    #g.courseNum=db.session.query(Score.courseName, func.count(Score.courseName)).group_by(Score.courseName).first()[1]
     g.studentNum=main.studentNum
     major=db.session.query(Student.majorName,func.count(Student.id).label("majorNum")).group_by(Student.majorName).all()
     g.majorNum=len(major)
@@ -251,6 +235,33 @@ def index():
     g.female = female
     return render_template("index.html",studentNum=main.studentNum,g=g)
 
+@main.route("/analyseMajor",methods=["GET","POST"])
+def analyseMajor():
+    form = forms.NormalForm()
+    if form.validate_on_submit():
+        majorName = db.session.query(Student.majorName).filter(
+            Student.majorName.like("%" + form.string.data + "%")).first()
+        if majorName==None:
+            return render_template("analyseMajor.html", studentNum=main.studentNum, form=form,error=True)
+        else:
+            majorName=majorName.majorName
+        terms=db.session.query(Score.termName).filter(Student.id==Score.studentId,Student.majorName==majorName).group_by(Score.termName).all()
+        results=[]
+        for i in terms:
+            results.append({
+                "termName": i.termName,
+                "majoravg":db.session.query(func.avg(Score.mark)).filter(
+                    Score.studentId == Student.id,Score.termName == i.termName, Student.majorName == majorName).scalar(),
+                "majorAvg": db.session.query(Score.courseName,Score.courseDe,Score.credit, func.avg(Score.mark).label("avg")).filter(
+                    Score.studentId == Student.id,Score.termName == i.termName, Student.majorName == majorName).group_by(Score.courseName).all(),
+                "class": db.session.query(Student.className,func.avg(Score.mark).label("avg")).filter(Score.studentId == Student.id,
+                    Student.majorName==majorName,Score.termName == i.termName).group_by(Student.className).all(),
+                "topStu":db.session.query(Student.id,Student.gender,Student.className,func.avg(Score.mark).label("avg")).filter(Score.studentId == Student.id,
+                           Student.majorName==majorName,Score.termName == i.termName).group_by(Student.id).order_by(db.desc("avg")).all()[:20]})
+        return render_template('analyseMajor.html', studentNum=main.studentNum,form=form,results=results,majorName=majorName)
+    if request.method=="GET":
+        return render_template("analyseMajor.html", studentNum=main.studentNum,form=form)
+
 @main.route("/score",methods=["GET","POST"])
 def score():
     form=forms.Score()
@@ -262,15 +273,81 @@ def score():
         g.info=form.info.data
         g.search=form.search.data
         (g.n,g.avg, g.results, g.youxiu, g.bujige,g.nums,g.youxiulv,g.bujigelv,g.others)=scoreAnalysis(g.info,g.search)
+        if g.n==0:
+            return render_template("scores.html", studentNum=main.studentNum,form=form,error=True)
         g.info=maps[g.info]
         return render_template("scores.html", studentNum=main.studentNum, form=form,g=g)
     if request.method=="GET":
         return render_template("scores.html", studentNum=main.studentNum,form=form)
 
+@main.route("/compareStudent",methods=["GET","POST"])
+def compareStudent():
+    form = forms.CompareForm()
+    if form.validate_on_submit():
+        studentId1 = form.Name1.data
+        studentId2 = form.Name2.data
+        student1 = db.session.query(Student).filter(Student.id == studentId1).first()
+        student2 = db.session.query(Student).filter(Student.id == studentId2).first()
+        if not (student1 and student2):
+            return render_template("compareStudent.html", studentNum=main.studentNum, form=form,error=True)
+        if student1:
+            student1.courseNums = db.session.query(func.count("*")).filter(Score.studentId == studentId1).scalar()
+            student1.courses = db.session.query(Score).filter(Score.studentId == studentId1).all()
+            student1.youxiuNums=db.session.query(func.count("*")).filter(Score.studentId == studentId1,Score.mark>=90).scalar()
+            student1.bujigeNums=db.session.query(func.count("*")).filter(Score.studentId== studentId1,Score.mark<60).scalar()
+            student1.youxiuCourses = db.session.query(Score).filter(Score.studentId == studentId1).order_by(
+                db.desc(Score.mark)).all()[:5]
+        if student2:
+            student2.courseNums = db.session.query(func.count("*")).filter(Score.studentId == studentId2).scalar()
+            student2.courses = db.session.query(Score).filter(Score.studentId == studentId2).all()
+            student2.youxiuNums=db.session.query(func.count("*")).filter(Score.studentId == studentId2,Score.mark>=90).scalar()
+            student2.bujigeNums=db.session.query(func.count("*")).filter(Score.studentId== studentId2,Score.mark<60).scalar()
+            student2.youxiuCourses = db.session.query(Score).filter(Score.studentId == studentId2).order_by(db.desc(Score.mark)).all()[:5]
+        return render_template("compareStudent.html", studentNum = main.studentNum, form=form,student=[student1,student2])
+    if request.method == "GET":
+        return render_template("compareStudent.html", studentNum=main.studentNum, form=form)
+
+@main.route("/compareCourse",methods=["GET","POST"])
+def compareCourse():
+    form=forms.CompareForm()
+    if request.method=="POST":
+        courseName1 = form.Name1.data
+        courseName2 = form.Name2.data
+        courses1 = db.session.query(Score).filter(
+            Score.courseName.like("%"+courseName1+"%")).group_by(Score.termName, Score.classId).all()
+        courses2 = db.session.query(Score).filter(
+            Score.courseName.like("%"+courseName2+"%")).group_by(Score.termName, Score.classId).all()
+        if courses1==courses2==[]:
+            return render_template("compareCourse.html", studentNum=main.studentNum, form=form, error=True)
+        if courses1:
+            for i in courses1:
+                i.studentNums = db.session.query(func.count("*")).filter(Score.courseName == i.courseName,
+                                                                         Score.termName == i.termName,
+                                                                         Score.classId == i.classId).scalar()
+                i.avg = db.session.query(func.avg(Score.mark)).filter(Score.courseName == i.courseName,
+                                                                  Score.termName == i.termName,
+                                                                  Score.classId == i.classId).scalar()
+                i.youxiuStudents = db.session.query(Score).filter(Score.courseName == i.courseName,
+                                                              Score.termName == i.termName, Score.classId == i.classId).order_by(db.desc(Score.mark)).all()[:5]
+        if courses2:
+            for i in courses2:
+                i.studentNums = db.session.query(func.count("*")).filter(Score.courseName == i.courseName,
+                                                                         Score.termName == i.termName,
+                                                                         Score.classId == i.classId).scalar()
+                i.avg = db.session.query(func.avg(Score.mark)).filter(Score.courseName == i.courseName,
+                                                                  Score.termName == i.termName,
+                                                                  Score.classId == i.classId).scalar()
+                i.youxiuStudents = db.session.query(Score).filter(Score.courseName == i.courseName,
+                                                              Score.termName == i.termName, Score.classId == i.classId).order_by(db.desc(Score.mark)).all()[:5]
+        return render_template("compareCourse.html", studentNum=main.studentNum, form=form, courses=[courses1, courses2])
+    return render_template("compareCourse.html", studentNum=main.studentNum, form=form)
+
 def scoreAnalysis(key,value):
     maps = {"major": Student.majorName, "student": Student.id,"department": Student.departmentName, "grade": Student.grade,
             "class": Student.className, "gender": Student.gender,"course":Score.courseName,"courseDe":Score.courseDe}
     args=db.session.query(maps[key].label("arg")).filter(maps[key].like("%"+value+"%")).group_by(maps[key]).all()
+    if len(args)==0:
+        return (0, None, None, None, None, None, None, None, None)
     if len(args)==1:
         avg=db.session.query(func.avg(Score.mark)).filter(maps[key].like("%"+value+"%"),Student.id==Score.studentId).scalar()
         results=db.session.query(Score.studentId,Score,Score.courseName,Score.credit,Score.termName,Score.courseDe,
@@ -321,28 +398,3 @@ def scoreAnalysis(key,value):
                 i["bujigelv"]=i["bujige"]/len(i["results"])
             i["num"]=len(i["results"])
         return (len(args),zongarg,zongresults,zongyouxiu,zongbujige,zongnums,zongyouxiulv,zongbujigelv,results)
-
-@main.route("/compareStudent",methods=["GET","POST"])
-def compareStudent():
-    form = forms.CompareForm()
-    if form.validate_on_submit():
-        studentId1 = form.Name1.data
-        studentId2 = form.Name2.data
-        student1 = db.session.query(Student).filter(Student.id == studentId1).first()
-        student2 = db.session.query(Student).filter(Student.id == studentId2).first()
-        if student1:
-            student1.courseNums = db.session.query(func.count("*")).filter(Score.studentId == studentId1).scalar()
-            student1.courses = db.session.query(Score).filter(Score.studentId == studentId1).all()
-            student1.youxiuNums=db.session.query(func.count("*")).filter(Score.studentId == studentId1,Score.mark>=90).scalar()
-            student1.bujigeNums=db.session.query(func.count("*")).filter(Score.studentId== studentId1,Score.mark<60).scalar()
-            student1.youxiuCourses = db.session.query(Score).filter(Score.studentId == studentId1).order_by(
-                db.desc(Score.mark)).all()[:5]
-        if student2:
-            student2.courseNums = db.session.query(func.count("*")).filter(Score.studentId == studentId2).scalar()
-            student2.courses = db.session.query(Score).filter(Score.studentId == studentId2).all()
-            student2.youxiuNums=db.session.query(func.count("*")).filter(Score.studentId == studentId2,Score.mark>=90).scalar()
-            student2.bujigeNums=db.session.query(func.count("*")).filter(Score.studentId== studentId2,Score.mark<60).scalar()
-            student2.youxiuCourses = db.session.query(Score).filter(Score.studentId == studentId2).order_by(db.desc(Score.mark)).all()[:5]
-        return render_template("compareStudent.html", studentNum = main.studentNum, form=form,student=[student1,student2])
-    if request.method == "GET":
-        return render_template("compareStudent.html", studentNum=main.studentNum, form=form)

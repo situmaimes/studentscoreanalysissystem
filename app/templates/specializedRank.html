@@ -1,11 +1,6 @@
 {% extends "template.html" %}
 {% block main %}
-<div id="page-wrapper">
-	<div class="main-page">
-		<div class="row-one">
-			<div class="clearfix"> </div>
-		</div>
-
+{% if g.specializedScore %}
 			<ul id="myTabs" class="nav nav-tabs" role="tablist">
 				{% for major in g.specializedScore %}
 				<li role="presentation" class="{% if loop.index == 1 %}active{% endif %}">
@@ -55,6 +50,4 @@
 				{% endfor %}
 			</div>
 		<div class="clearfix"> </div>
-	</div>
-</div>
 {% endblock %}
