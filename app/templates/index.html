@@ -40,11 +40,11 @@
 						<h4 class="title">性别比例</h4>
 						<canvas id="pie" height="300" width="600"> </canvas>
 					</div>
-					<div class="col-md-6 stats-info states-mdl widget">
+					<div class="col-md-6 stats-info states-mdl widget" style="float:left">
 						<div class="stats-title">
 							<h4 class="title">专业分布</h4>
 						</div>
-						<div class="stats-body">
+						<div class="stats-body" >
 							<ul class="list-unstyled">
 								{% for classes in g.majors %}
 								<li>{{ classes[0] }} <span class="pull-right">{{ classes[1] }}%</span>

@@ -4,7 +4,7 @@
 {% endblock %}
 {% block main %}
 				 {% if g.avg %}
-					<div class="row">
+					<!--<div class="row">
 					 <div class="col stats-info widget-shadow">
 						<table class="table stats-table table-hover">
 							<thead>
@@ -33,8 +33,7 @@
 					</div>
 						<div class="clearfix"> </div>
 					</div>
-					<div class="clearfix"> </div>
-                {% if g.others %}
+					<div class="clearfix"> </div>-->
                 {% for other in g.others %}
                 <div class="row">
 					 <div class="col stats-info widget-shadow">
@@ -53,7 +52,7 @@
 							<tbody>
 								<tr>
 									<th>{{other["name"]}}</th>
-									<td><h5>{% if other["avg"] %}{{other["avg"]|round(2) }} {% endif %}<i class="label"></i></h5></td>
+									<td><h5>{% if other["avg"] %}{{other["avg"]|round(2) }} {%else%}0{% endif %}<i class="label"></i></h5></td>
 									<td><h5>{{other["num"]|round(2)}} <i class="label"></i></h5></td>
 									<td><h5>{{other["youxiu"]|round(2)}} <i class="label"></i></h5></td>
 									<td><h5>{{other["bujige"]|round(2)}} <i class="label"></i></h5></td>
@@ -66,12 +65,12 @@
 						<div class="clearfix"> </div>
 					</div>
                 {% endfor %}
-                {% endif %}
 				<div class="clearfix"> </div>
                 {% if g.results %}
 					<div class="row">
 					 <div class="col stats-info widget-shadow">
 						<table class="table stats-table table-hover">
+							<h4 class="row">优秀课程</h4>
 							<thead>
 								<tr>
 									<th>学号</th>
@@ -99,7 +98,8 @@
 					</div>
 					</div>
 				{% endif %}
-				{% endif %}
+{% endif %}
+
 {% endblock %}
 
 
@@ -108,16 +108,18 @@
 {% block search %}
 <!--search-box-->
 				<div class="search-box">
-					<form class="input" method="POST">
+					<form class="form-inline" method="POST">
+						<div class="form-group">
 {{ form.hidden_tag() }}
-						<label>{{form.info()}}</label>
-						<br/>
+						{{form.info(class="form-control")}}
+						</div>
+						<div class="form-group">
  {{ form.search(class="sb-search-input input__field--madoka",placeholder="键入查询",id="input-31") }}
 						<label class="input__label" for="input-31">
 							<svg class="graphic" width="100%" height="100%" viewBox="0 0 404 77" preserveAspectRatio="none">
-								<path d="m0,0l404,0l0,77l-404,0l0,-77z"/>
 							</svg>
 						</label>
+							</div>
 </form>
 
 				</div><!--//end-search-box-->

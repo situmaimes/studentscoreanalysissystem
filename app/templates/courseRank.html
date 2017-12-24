@@ -9,9 +9,8 @@
 								<tr>
 									<th>排名</th>
 									<th>课程名称</th>
-                                    <th>教学班</th>
                                     <th>选班人数</th>
-									<th>学期名称</th>
+									<th>学期</th>
 									<th>学分</th>
                                     <th>课程性质</th>
                                     <th>平均分</th>
@@ -22,7 +21,6 @@
 								<tr style="cursor: pointer;">
 									<th scope="row">{{ loop.index }}</th>
 									<td>{{ course.courseName }}</td>
-                                    <td>{{ course.classId }}</td>
                                     <td>{{ course.nums }}</td>
                                     <td>{{ course.termName }}</td>
                                     <td><h5>{{ course.credit }} <i class="label"></i></h5></td>
