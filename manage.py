@@ -7,7 +7,7 @@ from app.prepare import processDB
 
 app=create_app("testing")
 
-if not os.path.exists("/"+app.config["SQLALCHEMY_DATABASE_URI"].lstrip("sqlite:///")):
+if not os.path.exists(app.config["SQLALCHEMY_DATABASE_URI"].split("sqlite:///")[-1]):
     appContext = app.app_context()
     appContext.push()
     processDB()
